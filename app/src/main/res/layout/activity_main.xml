@@ -21,21 +21,23 @@
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
+            android:layout_marginEnd="@dimen/_2dp"
             android:layout_weight="1"
             android:text="@string/categories"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:backgroundTint="@color/categoriesBtn"/>
 
         <Button
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="@dimen/_2dp"
             android:layout_weight="1"
             android:text="@string/favorites"
             app:icon="@drawable/ic_heart_empty"
             app:iconGravity="textEnd"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:backgroundTint="@color/favoritesBtn"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
