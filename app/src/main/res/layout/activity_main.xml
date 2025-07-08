@@ -5,15 +5,39 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainBackground"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:paddingHorizontal="@dimen/_16dp"
+        android:paddingVertical="@dimen/_8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            style="@style/StyleNavButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_2dp"
+            android:layout_weight="1"
+            android:text="@string/categories"
+            android:gravity="center"
+            android:backgroundTint="@color/categoriesBtn"/>
+
+        <Button
+            style="@style/StyleNavButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2dp"
+            android:layout_weight="1"
+            android:text="@string/favorites"
+            app:icon="@drawable/ic_heart_empty"
+            app:iconGravity="textEnd"
+            android:gravity="center"
+            android:backgroundTint="@color/favoritesBtn"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
