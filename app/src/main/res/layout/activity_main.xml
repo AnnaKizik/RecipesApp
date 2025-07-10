@@ -8,7 +8,17 @@
     android:background="@color/mainBackground"
     tools:context=".MainActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+       android:id="@+id/mainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/_16dp"
@@ -23,9 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_2dp"
             android:layout_weight="1"
-            android:text="@string/categories"
+            android:backgroundTint="@color/categoriesBtn"
             android:gravity="center"
-            android:backgroundTint="@color/categoriesBtn"/>
+            android:text="@string/categories" />
 
         <Button
             style="@style/StyleNavButton"
@@ -33,11 +43,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_2dp"
             android:layout_weight="1"
+            android:backgroundTint="@color/favoritesBtn"
+            android:gravity="center"
             android:text="@string/favorites"
             app:icon="@drawable/ic_heart_empty"
-            app:iconGravity="textEnd"
-            android:gravity="center"
-            android:backgroundTint="@color/favoritesBtn"/>
+            app:iconGravity="textEnd" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
