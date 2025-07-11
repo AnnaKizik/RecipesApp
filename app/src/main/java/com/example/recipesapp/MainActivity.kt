@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.commit
 import com.example.recipesapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.commit()
+        supportFragmentManager.commit {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.add(binding.root.id, CategoriesListFragment())
+        }
+
     }
 }
