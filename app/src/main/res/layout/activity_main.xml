@@ -5,11 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainBackground"
+    android:background="@color/mainBackground_color"
     tools:context=".MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-       android:id="@+id/mainContainer"
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -28,22 +28,24 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
+            android:id="@+id/btnCategories"
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_2dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/categoriesBtn"
+            android:backgroundTint="@color/categoriesBtn_color"
             android:gravity="center"
             android:text="@string/categories" />
 
         <Button
+            android:id="@+id/btnFavorites"
             style="@style/StyleNavButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_2dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/favoritesBtn"
+            android:backgroundTint="@color/favoritesBtn_color"
             android:gravity="center"
             android:text="@string/favorites"
             app:icon="@drawable/ic_heart_empty"
