@@ -12,4 +12,29 @@
         <item name="android:textAppearance">@style/StyleTitle14</item>
         <item name="cornerRadius">@dimen/_8dp</item>
     </style>
+
+    <style name="StyleFragmentHeader" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/headers_color</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="StyleCategoryCardHeader" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/headers_color</item>
+        <item name="android:padding">@dimen/_8dp</item>
+        <item name="android:gravity">start</item>
+    </style>
+
+    <style name="StyleCategoryCardDescription" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:textColor">@color/categoryCardDescription_color</item>
+        <item name="android:paddingHorizontal">@dimen/_8dp</item>
+    </style>
 </resources>
