@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_220dp"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_8dp"
     android:layout_marginTop="@dimen/_16dp"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/_8dp">
 
     <LinearLayout
@@ -19,24 +20,25 @@
             android:id="@+id/imCategoryImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_130dp"
+            android:contentDescription="@string/categoryCardDescription"
             android:scaleType="centerCrop"
-            android:src="@drawable/bcg_default" />
+            tools:src="@drawable/bcg_default" />
 
         <TextView
             android:id="@+id/tvCategoryHeader"
             style="@style/StyleCategoryCardHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="заголовок"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            tools:text="заголовок" />
 
         <TextView
             android:id="@+id/tvCategoryDescription"
             style="@style/StyleCategoryCardDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Описание"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            tools:text="Описание" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
