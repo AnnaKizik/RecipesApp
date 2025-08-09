@@ -10,6 +10,15 @@ import com.example.recipesapp.databinding.ItemCategoryBinding
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    var itemClickListener: OnItemClickListener? = null
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
     class ViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category) {
             binding.tvCategoryHeader.text = category.title
@@ -17,7 +26,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             val drawable = try {
                 Drawable.createFromStream(
                     binding.root.context.assets.open(category.imageUrl),
-                null
+                    null
                 )
             } catch (e: Exception) {
                 Log.d("!!!", "Image not found: ${category.imageUrl}")
@@ -35,6 +44,9 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position])
+        viewHolder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick()
+        }
     }
 
     override fun getItemCount() = dataSet.size
