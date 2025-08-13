@@ -11,10 +11,6 @@ import androidx.fragment.app.replace
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 import java.lang.IllegalStateException
 
-const val ARG_CATEGORY_ID = "arg_category_id"
-const val ARG_CATEGORY_NAME = "arg_category_name"
-const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
-
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding
@@ -54,13 +50,12 @@ class CategoriesListFragment : Fragment() {
 
     private fun openRecipesByCategoryId(categoryId: Int) {
 
-        val categoryName = STUB.getCategories().find { it.id == categoryId }?.title
-        val categoryImageUrl = STUB.getCategories().find { it.id == categoryId }?.imageUrl
+        val categorySearch = STUB.getCategories().find { it.id == categoryId }
 
         val bundle = bundleOf(
             ARG_CATEGORY_ID to categoryId,
-            ARG_CATEGORY_NAME to categoryName,
-            ARG_CATEGORY_IMAGE_URL to categoryImageUrl
+            ARG_CATEGORY_NAME to categorySearch?.title,
+            ARG_CATEGORY_IMAGE_URL to categorySearch?.imageUrl
         )
 
         parentFragmentManager.commit {

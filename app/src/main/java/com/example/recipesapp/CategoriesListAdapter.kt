@@ -45,7 +45,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position])
         viewHolder.itemView.setOnClickListener { category ->
-            itemClickListener?.onItemClick(category.id)
+            itemClickListener?.onItemClick(dataSet[position].id)
         }
     }
 
