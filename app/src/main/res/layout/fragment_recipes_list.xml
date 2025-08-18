@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainBackground_color">
+    android:background="@color/mainBackground_color"
+    android:orientation="vertical">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_224dp">
+
+        <ImageView
+            android:id="@+id/ivRecipeCategoryCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/RecipesCategoryCover"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tvRecipeCategoryName"
+            style="@style/StyleFragmentHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            android:background="@drawable/shape_fragment_header"
+            app:layout_constraintBottom_toBottomOf="@+id/ivRecipeCategoryCover"
+            app:layout_constraintStart_toStartOf="@+id/ivRecipeCategoryCover" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecipes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recipes List Fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        android:layout_marginHorizontal="@dimen/_8dp"
+        android:stretchColumns="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_recipe" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

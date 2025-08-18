@@ -4,4 +4,7 @@
     <string name="favorites">избранное</string>
     <string name="categoriesContentDescription">Обложка раздела Категории</string>
     <string name="categoryCardDescription">Обложка категории</string>
+    <string name="RecipesCategoryCover">Обложка категории рецептов</string>
+    <string name="recipeImage">Изображение рецепта</string>
+    <string name="recipeName">Название рецепта</string>
 </resources>
