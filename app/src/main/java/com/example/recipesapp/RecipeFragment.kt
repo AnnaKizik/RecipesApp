@@ -1,12 +1,15 @@
 package com.example.recipesapp
 
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.lang.IllegalStateException
 
 class RecipeFragment() : Fragment() {
@@ -30,7 +33,42 @@ class RecipeFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recipe = getRecipeFromArgs()
+        initUi(recipe)
+        initRecycler(recipe?.ingredients ?: emptyList(), recipe?.method ?: emptyList())
+    }
+
+    private fun initUi(recipe: Recipe?) {
         binding.tvRecipeName.text = recipe?.title
+
+        if (!recipe?.imageUrl.isNullOrEmpty()) {
+            loadRecipeCoverFromAssets(recipe.imageUrl)
+        } else {
+            binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
+        }
+    }
+
+    private fun initRecycler(ingredientsData: List<Ingredient>, methodData: List<String>) {
+        val ingredientsAdapter = IngredientsAdapter(ingredientsData)
+        val ingredientsDivider =
+            MaterialDividerItemDecoration(binding.rvIngredients.context, LinearLayout.VERTICAL)
+        with(binding) {
+            rvIngredients.adapter = ingredientsAdapter
+            rvIngredients.addItemDecoration(ingredientsDivider)
+        }
+        val methodAdapter = MethodAdapter(methodData)
+        val methodDivider =
+            MaterialDividerItemDecoration(binding.rvMethod.context, LinearLayout.VERTICAL)
+        with(binding) {
+            rvMethod.adapter = methodAdapter
+            rvMethod.addItemDecoration(methodDivider)
+        }
+    }
+
+    private fun loadRecipeCoverFromAssets(imageUrl: String) {
+        val recipeCover = requireContext().assets.open(imageUrl).use { inputStream ->
+            Drawable.createFromStream(inputStream, null)
+        }
+        binding.ivRecipeCover.setImageDrawable(recipeCover)
     }
 
     override fun onDestroyView() {

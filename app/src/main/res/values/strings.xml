@@ -7,4 +7,11 @@
     <string name="RecipesCategoryCover">Обложка категории рецептов</string>
     <string name="recipeImage">Изображение рецепта</string>
     <string name="recipeName">Название рецепта</string>
+    <string name="recipeCover">Обложка рецепта</string>
+    <string name="favoritesButton">Кнопка Избранное</string>
+    <string name="Ingredients">ингредиенты</string>
+    <string name="cookingMethod">способ приготовления</string>
+    <string name="servingsCount">Порции: n</string>
+    <string name="recipePageName">Название рецепта</string>
+    <string name="cookingSteps">Описание этапов приготовления блюда</string>
 </resources>
