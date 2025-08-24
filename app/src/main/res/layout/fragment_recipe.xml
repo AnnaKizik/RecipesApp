@@ -50,75 +50,67 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <TextView
+            style="@style/StyleFragmentHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16dp"
             android:layout_marginTop="@dimen/_16dp"
-            android:orientation="vertical">
+            android:gravity="start"
+            android:padding="@dimen/_0dp"
+            android:text="@string/Ingredients"
+            tools:ignore="RtlSymmetry" />
 
-            <TextView
-                style="@style/StyleFragmentHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="@dimen/_0dp"
-                android:text="@string/Ingredients"
-                tools:ignore="RtlSymmetry" />
+        <TextView
+            android:id="@+id/tvServingCount"
+            style="@style/StyleServingsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16dp"
+            android:layout_marginVertical="@dimen/_6dp"
+            android:gravity="start"
+            android:text="@string/servings" />
 
-            <TextView
-                android:id="@+id/tvServingCount"
-                style="@style/StyleServingsHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_6dp"
-                android:gravity="start"
-                tools:text="@string/servingsCount" />
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16dp" />
 
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvIngredients"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16dp"
-                android:background="@drawable/shape_recipe_rv_bcg"
-                android:paddingHorizontal="@dimen/_12dp"
-                android:paddingVertical="@dimen/_4dp"
-                android:stretchColumns="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_ingredient" />
-        </LinearLayout>
-
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIngredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16dp"
             android:layout_marginTop="@dimen/_16dp"
-            android:orientation="vertical">
+            android:background="@drawable/shape_recipe_rv_bcg"
+            android:paddingHorizontal="@dimen/_12dp"
+            android:paddingVertical="@dimen/_4dp"
+            android:stretchColumns="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_ingredient" />
 
-            <TextView
-                style="@style/StyleFragmentHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="@dimen/_0dp"
-                android:text="@string/cookingMethod" />
+        <TextView
+            style="@style/StyleFragmentHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:gravity="start"
+            android:padding="@dimen/_0dp"
+            android:text="@string/cookingMethod" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMethod"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16dp"
-                android:background="@drawable/shape_recipe_rv_bcg"
-                android:paddingHorizontal="@dimen/_12dp"
-                android:paddingVertical="@dimen/_4dp"
-                android:stretchColumns="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_cooking_step" />
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMethod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:background="@drawable/shape_recipe_rv_bcg"
+            android:paddingHorizontal="@dimen/_12dp"
+            android:paddingVertical="@dimen/_4dp"
+            android:stretchColumns="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_cooking_step" />
 
     </LinearLayout>
 

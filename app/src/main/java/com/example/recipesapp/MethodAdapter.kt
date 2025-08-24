@@ -4,14 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemCookingStepBinding
-import com.example.recipesapp.databinding.ItemIngredientBinding
 
-class MethodAdapter (private val dataSet: List<String>):
+class MethodAdapter(private val dataSet: List<String>) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemCookingStepBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(cookingStep: String) {
-            binding.tvCookingStepText.text = cookingStep
+        fun bind(cookingStep: String, stepNumber: Int) {
+            val cookingStepText = binding.root.context.getString(
+                R.string.cooking_step_format,
+                stepNumber + 1,
+                cookingStep
+            )
+            binding.tvCookingStepText.text = cookingStepText
         }
     }
 
@@ -22,7 +26,7 @@ class MethodAdapter (private val dataSet: List<String>):
     }
 
     override fun onBindViewHolder(viewHolder: MethodAdapter.ViewHolder, position: Int) {
-        viewHolder.bind(dataSet[position])
+        viewHolder.bind(dataSet[position], position)
     }
 
     override fun getItemCount() = dataSet.size

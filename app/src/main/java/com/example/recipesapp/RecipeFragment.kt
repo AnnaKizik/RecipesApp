@@ -50,14 +50,23 @@ class RecipeFragment() : Fragment() {
     private fun initRecycler(ingredientsData: List<Ingredient>, methodData: List<String>) {
         val ingredientsAdapter = IngredientsAdapter(ingredientsData)
         val ingredientsDivider =
-            MaterialDividerItemDecoration(binding.rvIngredients.context, LinearLayout.VERTICAL)
+            MaterialDividerItemDecoration(
+                binding.rvIngredients.context,
+                LinearLayout.VERTICAL
+            ).apply {
+                setDividerColorResource(binding.rvIngredients.context, R.color.divider_color)
+                isLastItemDecorated = false
+            }
         with(binding) {
             rvIngredients.adapter = ingredientsAdapter
             rvIngredients.addItemDecoration(ingredientsDivider)
         }
         val methodAdapter = MethodAdapter(methodData)
         val methodDivider =
-            MaterialDividerItemDecoration(binding.rvMethod.context, LinearLayout.VERTICAL)
+            MaterialDividerItemDecoration(binding.rvMethod.context, LinearLayout.VERTICAL).apply {
+                setDividerColorResource(binding.rvMethod.context, R.color.divider_color)
+                isLastItemDecorated = false
+            }
         with(binding) {
             rvMethod.adapter = methodAdapter
             rvMethod.addItemDecoration(methodDivider)
