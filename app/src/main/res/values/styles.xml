@@ -38,4 +38,23 @@
         <item name="android:paddingHorizontal">@dimen/_8dp</item>
         <item name="android:paddingBottom">@dimen/_10dp</item>
     </style>
+
+    <style name="StyleServingsHeader" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textColor">@color/descriptionText_color</item>
+    </style>
+
+    <style name="StyleIngredients" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/descriptionText_color</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="StyleCookingSteps" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textColor">@color/descriptionText_color</item>
+    </style>
 </resources>
