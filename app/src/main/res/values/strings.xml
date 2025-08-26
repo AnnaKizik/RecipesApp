@@ -11,7 +11,7 @@
     <string name="favoritesButton">Кнопка Избранное</string>
     <string name="Ingredients">ингредиенты</string>
     <string name="cookingMethod">способ приготовления</string>
-    <string name="servings">Порции</string>
+    <string name="servings">Порции:</string>
     <string name="recipePageName">Название рецепта</string>
     <string name="cookingSteps">Описание этапов приготовления блюда</string>
     <string name="cooking_step_format">%1$d. %2$s</string>

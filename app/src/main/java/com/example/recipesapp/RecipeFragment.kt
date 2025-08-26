@@ -1,5 +1,6 @@
 package com.example.recipesapp
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -61,6 +63,7 @@ class RecipeFragment() : Fragment() {
             rvIngredients.adapter = ingredientsAdapter
             rvIngredients.addItemDecoration(ingredientsDivider)
         }
+
         val methodAdapter = MethodAdapter(methodData)
         val methodDivider =
             MaterialDividerItemDecoration(binding.rvMethod.context, LinearLayout.VERTICAL).apply {
@@ -71,6 +74,27 @@ class RecipeFragment() : Fragment() {
             rvMethod.adapter = methodAdapter
             rvMethod.addItemDecoration(methodDivider)
         }
+
+        binding.sbServingsCount.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("SetTextI18n")
+            override fun onProgressChanged(
+                seekBar: SeekBar,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                val actualValue = progress + 1
+                binding.tvServingCount.text = " $actualValue"
+                ingredientsAdapter.updateIngredients(actualValue)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                val finalValue = seekBar.progress + 1
+            }
+        })
     }
 
     private fun loadRecipeCoverFromAssets(imageUrl: String) {
@@ -86,9 +110,12 @@ class RecipeFragment() : Fragment() {
     }
 
     private fun getRecipeFromArgs(): Recipe? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
+        } else {
+            @Suppress("DEPRECATION")
             arguments?.getParcelable(ARG_RECIPE)
-        else arguments?.getParcelable(ARG_RECIPE) as? Recipe
+        }
     }
 
 }
