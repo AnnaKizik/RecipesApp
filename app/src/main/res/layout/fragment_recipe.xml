@@ -81,7 +81,8 @@
                 style="@style/StyleServingsHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text=" кол-во порций" />
+                android:layout_marginStart="@dimen/_6dp"
+                android:text="@string/_1" />
         </LinearLayout>
 
         <SeekBar
@@ -89,8 +90,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16dp"
-            android:max="4"
-            android:progress="2" />
+            android:max="5"
+            android:min="1"
+            android:progress="1" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredients"

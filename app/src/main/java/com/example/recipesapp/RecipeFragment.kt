@@ -83,17 +83,13 @@ class RecipeFragment() : Fragment() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                val actualValue = progress + 1
-                binding.tvServingCount.text = " $actualValue"
-                ingredientsAdapter.updateIngredients(actualValue)
+                binding.tvServingCount.text = progress.toString()
+                ingredientsAdapter.updateIngredients(progress)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                val finalValue = seekBar.progress + 1
-            }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
     }
 
@@ -117,5 +113,4 @@ class RecipeFragment() : Fragment() {
             arguments?.getParcelable(ARG_RECIPE)
         }
     }
-
 }

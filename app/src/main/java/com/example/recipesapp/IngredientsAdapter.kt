@@ -1,10 +1,12 @@
 package com.example.recipesapp
 
 import android.annotation.SuppressLint
+import android.icu.math.BigDecimal.ROUND_HALF_UP
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemIngredientBinding
+import java.math.BigDecimal
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
@@ -13,7 +15,7 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateIngredients(progress: Int) {
-        quantity = progress + 1
+        quantity = progress
         notifyDataSetChanged()
     }
 
@@ -21,12 +23,13 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
         @SuppressLint("SetTextI18n")
         fun bind(ingredient: Ingredient, quantity: Int) {
             binding.tvIngredientName.text = ingredient.description
-            val ingredientQuantity = ingredient.quantity.toDouble() * quantity
-            val formatIngredientQuantity = if (ingredientQuantity % 1 == 0.0) {
-                ingredientQuantity.toInt().toString()
-            } else {
-                "%.1f".format(ingredientQuantity)
-            }
+            val ingredientQuantity = BigDecimal(ingredient.quantity).multiply(BigDecimal(quantity))
+            val formatIngredientQuantity =
+                if (ingredientQuantity.stripTrailingZeros().scale() == 0) {
+                    ingredientQuantity.toInt().toString()
+                } else {
+                    ingredientQuantity.setScale(1, ROUND_HALF_UP)
+                }
             binding.tvIngredientQuantityAndUnitOfMeasure.text =
                 "$formatIngredientQuantity ${ingredient.unitOfMeasure}"
         }
