@@ -3,10 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mainBackground_color">#F4FAFF</color>
-    <color name="categoriesBtn_color">#525DC0</color>
+    <color name="categoriesBtnAndSeekBarThumb_color">#525DC0</color>
     <color name="favoritesBtn_color">#E13E3E</color>
     <color name="headers_color">#5F3678</color>
     <color name="descriptionText_color">#666666</color>
-    <color name="seekBarLine_color">#A1A9F9</color>
+    <color name="seekBarProgress_color">#A1A9F9</color>
     <color name="divider_color">#F5F5F5</color>
 </resources>
