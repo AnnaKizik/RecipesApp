@@ -1,12 +1,12 @@
 package com.example.recipesapp
 
 import android.annotation.SuppressLint
-import android.icu.math.BigDecimal.ROUND_HALF_UP
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemIngredientBinding
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
@@ -23,13 +23,11 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
         @SuppressLint("SetTextI18n")
         fun bind(ingredient: Ingredient, quantity: Int) {
             binding.tvIngredientName.text = ingredient.description
-            val ingredientQuantity = BigDecimal(ingredient.quantity).multiply(BigDecimal(quantity))
-            val formatIngredientQuantity =
-                if (ingredientQuantity.stripTrailingZeros().scale() == 0) {
-                    ingredientQuantity.toInt().toString()
-                } else {
-                    ingredientQuantity.setScale(1, ROUND_HALF_UP)
-                }
+            val formatIngredientQuantity = BigDecimal(ingredient.quantity)
+                .multiply(BigDecimal(quantity))
+                .setScale(1, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString()
             binding.tvIngredientQuantityAndUnitOfMeasure.text =
                 "$formatIngredientQuantity ${ingredient.unitOfMeasure}"
         }
@@ -38,13 +36,13 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>) :
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
-    ): IngredientsAdapter.ViewHolder {
+    ): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
         val binding = ItemIngredientBinding.inflate(inflater, viewGroup, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(viewHolder: IngredientsAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position], quantity)
     }
 

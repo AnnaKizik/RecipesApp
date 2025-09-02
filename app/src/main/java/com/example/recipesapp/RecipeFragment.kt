@@ -39,6 +39,7 @@ class RecipeFragment() : Fragment() {
         initRecycler(recipe?.ingredients ?: emptyList(), recipe?.method ?: emptyList())
     }
 
+
     private fun initUi(recipe: Recipe?) {
         binding.tvRecipeName.text = recipe?.title
 
@@ -46,6 +47,20 @@ class RecipeFragment() : Fragment() {
             loadRecipeCoverFromAssets(recipe.imageUrl)
         } else {
             binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
+        }
+
+        var isFavorite = false
+
+        binding.btnFavorites.apply {
+            setImageResource(R.drawable.ic_heart_empty)
+            setOnClickListener {
+                isFavorite = !isFavorite
+                if (isFavorite) {
+                    binding.btnFavorites.setImageResource(R.drawable.ic_heart)
+                } else {
+                    binding.btnFavorites.setImageResource(R.drawable.ic_heart_empty)
+                }
+            }
         }
     }
 

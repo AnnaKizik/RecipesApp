@@ -26,13 +26,15 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
+                android:id="@+id/btnFavorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16dp"
                 android:layout_marginEnd="@dimen/_16dp"
-                android:background="@android:color/transparent"
+                android:background="@null"
+                android:foreground="?attr/selectableItemBackground"
                 android:contentDescription="@string/favoritesButton"
-                android:src="@drawable/ic_heart"
+                tools:src="@drawable/ic_heart"
                 app:layout_constraintEnd_toEndOf="@+id/ivRecipeCover"
                 app:layout_constraintTop_toTopOf="@+id/ivRecipeCover" />
 
