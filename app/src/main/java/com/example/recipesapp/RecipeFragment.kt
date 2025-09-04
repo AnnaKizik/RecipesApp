@@ -51,7 +51,7 @@ class RecipeFragment() : Fragment() {
             binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
         }
 
-        var isFavorite = checkIsInFavorites(recipe!!.id)
+        var isFavorite = checkIsInFavorites(recipe?.id)
         val listOfFavorites = getFavorites()
 
         binding.btnFavorites.apply {
@@ -62,11 +62,11 @@ class RecipeFragment() : Fragment() {
                 isFavorite = !isFavorite
                 if (isFavorite) {
                     binding.btnFavorites.setImageResource(R.drawable.ic_heart)
-                    listOfFavorites.add(recipe.id.toString())
+                    listOfFavorites.add(recipe?.id.toString())
                     saveFavorites(listOfFavorites)
                 } else {
                     binding.btnFavorites.setImageResource(R.drawable.ic_heart_empty)
-                    listOfFavorites.remove(recipe.id.toString())
+                    listOfFavorites.remove(recipe?.id.toString())
                     saveFavorites(listOfFavorites)
                 }
             }
@@ -151,11 +151,10 @@ class RecipeFragment() : Fragment() {
         val sharedPrefs = requireContext().getSharedPreferences(
             APP_PREFS, Context.MODE_PRIVATE
         )
-        return HashSet(sharedPrefs.getStringSet(FAVORITES_LIST, mutableSetOf())!!)
+        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
     }
 
-    private fun checkIsInFavorites(recipeId: Int): Boolean =
-        if (getFavorites().find { it == recipeId.toString() }.isNullOrEmpty()) false
-        else true
+    private fun checkIsInFavorites(recipeId: Int?): Boolean =
+        getFavorites().contains(recipeId.toString())
 
 }
