@@ -1,6 +1,7 @@
 package com.example.recipesapp
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.lang.IllegalStateException
+import androidx.core.content.edit
 
 class RecipeFragment() : Fragment() {
 
@@ -49,16 +51,23 @@ class RecipeFragment() : Fragment() {
             binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
         }
 
-        var isFavorite = false
+        var isFavorite = checkIsInFavorites(recipe?.id)
+        val listOfFavorites = getFavorites()
 
         binding.btnFavorites.apply {
-            setImageResource(R.drawable.ic_heart_empty)
+            if (isFavorite) setImageResource(R.drawable.ic_heart)
+            else setImageResource(R.drawable.ic_heart_empty)
+
             setOnClickListener {
                 isFavorite = !isFavorite
                 if (isFavorite) {
                     binding.btnFavorites.setImageResource(R.drawable.ic_heart)
+                    listOfFavorites.add(recipe?.id.toString())
+                    saveFavorites(listOfFavorites)
                 } else {
                     binding.btnFavorites.setImageResource(R.drawable.ic_heart_empty)
+                    listOfFavorites.remove(recipe?.id.toString())
+                    saveFavorites(listOfFavorites)
                 }
             }
         }
@@ -128,4 +137,24 @@ class RecipeFragment() : Fragment() {
             arguments?.getParcelable(ARG_RECIPE)
         }
     }
+
+    private fun saveFavorites(favoritesList: Set<String>) {
+        val sharedPrefs = requireContext().getSharedPreferences(
+            APP_PREFS, Context.MODE_PRIVATE
+        )
+        sharedPrefs.edit {
+            putStringSet(FAVORITES_LIST, favoritesList)
+        }
+    }
+
+    private fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = requireContext().getSharedPreferences(
+            APP_PREFS, Context.MODE_PRIVATE
+        )
+        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
+    }
+
+    private fun checkIsInFavorites(recipeId: Int?): Boolean =
+        getFavorites().contains(recipeId.toString())
+
 }
