@@ -16,4 +16,7 @@
     <string name="cookingSteps">Описание этапов приготовления блюда</string>
     <string name="cooking_step_format">%1$d. %2$s</string>
     <string name="_1">1</string>
+    <string name="favoritesCover">Обложка раздела Избранное</string>
+    <string name="favoritesHeader">избранное</string>
+    <string name="favoritesListIsEmpty">Вы еще не добавили ни одного рецепта в избранное</string>
 </resources>

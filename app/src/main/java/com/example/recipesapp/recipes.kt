@@ -271,4 +271,7 @@ object STUB {
 
     fun getRecipeById(recipeId: Int) = burgerRecipes.find { it.id == recipeId }
 
+    fun getRecipesByIds(listOfFavorites: MutableSet<String>): List<Recipe> =
+        burgerRecipes.filter { listOfFavorites.map { it.toIntOrNull() }.contains(it.id) }
+
 }

@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainBackground_color">
+    android:background="@color/mainBackground_color"
+    android:orientation="vertical">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_224dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/favoritesCover"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bcg_favorites" />
+
+        <TextView
+            style="@style/StyleFragmentHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            android:background="@drawable/shape_fragment_header"
+            android:text="@string/favoritesHeader"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="@+id/imageView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavorites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="fragment favorites"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        android:layout_marginHorizontal="@dimen/_8dp"
+        android:stretchColumns="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_recipe" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tvFavoritesIsEmptyMessage"
+        style="@style/StyleEmptyFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_202dp"
+        android:gravity="center"
+        android:text="@string/favoritesListIsEmpty" />
+
+</LinearLayout>

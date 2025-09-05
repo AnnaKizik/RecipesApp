@@ -51,8 +51,9 @@ class RecipeFragment() : Fragment() {
             binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
         }
 
-        var isFavorite = checkIsInFavorites(recipe?.id)
-        val listOfFavorites = getFavorites()
+        val context = context ?: return
+        var isFavorite = checkIsInFavorites(recipe?.id, context)
+        val listOfFavorites = getFavorites(context)
 
         binding.btnFavorites.apply {
             if (isFavorite) setImageResource(R.drawable.ic_heart)
@@ -147,14 +148,25 @@ class RecipeFragment() : Fragment() {
         }
     }
 
-    private fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = requireContext().getSharedPreferences(
-            APP_PREFS, Context.MODE_PRIVATE
-        )
-        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
-    }
+//    fun getFavorites(): MutableSet<String> {
+//        if (!isAdded || context == null) {
+//            return mutableSetOf()
+//        }
+//        val sharedPrefs = requireContext().getSharedPreferences(
+//            APP_PREFS, Context.MODE_PRIVATE
+//        )
+//        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
+//    }
 
-    private fun checkIsInFavorites(recipeId: Int?): Boolean =
-        getFavorites().contains(recipeId.toString())
+    private fun checkIsInFavorites(recipeId: Int?, context: Context): Boolean =
+        getFavorites(context).contains(recipeId.toString())
 
 }
+
+fun getFavorites(context: Context): MutableSet<String> {
+    val sharedPrefs = context.getSharedPreferences(
+        APP_PREFS, Context.MODE_PRIVATE
+    )
+    return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
+}
+
