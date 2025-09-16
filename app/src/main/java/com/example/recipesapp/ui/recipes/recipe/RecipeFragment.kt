@@ -1,4 +1,4 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.recipe
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,6 +15,12 @@ import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.lang.IllegalStateException
 import androidx.core.content.edit
+import com.example.recipesapp.R
+import com.example.recipesapp.model.APP_PREFS
+import com.example.recipesapp.model.ARG_RECIPE
+import com.example.recipesapp.model.FAVORITES_LIST
+import com.example.recipesapp.model.Ingredient
+import com.example.recipesapp.model.Recipe
 
 class RecipeFragment() : Fragment() {
 
@@ -147,16 +153,6 @@ class RecipeFragment() : Fragment() {
             putStringSet(FAVORITES_LIST, favoritesList)
         }
     }
-
-//    fun getFavorites(): MutableSet<String> {
-//        if (!isAdded || context == null) {
-//            return mutableSetOf()
-//        }
-//        val sharedPrefs = requireContext().getSharedPreferences(
-//            APP_PREFS, Context.MODE_PRIVATE
-//        )
-//        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
-//    }
 
     private fun checkIsInFavorites(recipeId: Int?, context: Context): Boolean =
         getFavorites(context).contains(recipeId.toString())

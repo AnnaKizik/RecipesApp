@@ -1,8 +1,9 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ItemCookingStepBinding
 
 class MethodAdapter(private val dataSet: List<String>) :
@@ -19,13 +20,13 @@ class MethodAdapter(private val dataSet: List<String>) :
         }
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MethodAdapter.ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
         val binding = ItemCookingStepBinding.inflate(inflater, viewGroup, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(viewHolder: MethodAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position], position)
     }
 
