@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.lang.IllegalStateException
 import androidx.core.content.edit
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.recipesapp.R
 import com.example.recipesapp.model.APP_PREFS
 import com.example.recipesapp.model.ARG_RECIPE
@@ -30,6 +33,8 @@ class RecipeFragment() : Fragment() {
             "Binding for FragmentRecipeBinding must not be null"
         )
 
+    private val viewModel: RecipeViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,7 +46,9 @@ class RecipeFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.recipeState.observe(viewLifecycleOwner, Observer{
+           Log.i("!!!","isFavorite")
+        })
         val recipe = getRecipeFromArgs()
         initUi(recipe)
         initRecycler(recipe?.ingredients ?: emptyList(), recipe?.method ?: emptyList())
