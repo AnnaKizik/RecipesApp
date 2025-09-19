@@ -1,28 +1,73 @@
 package com.example.recipesapp.ui.recipes.recipe
 
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.util.Log
+import androidx.core.content.edit
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.recipesapp.data.STUB.getRecipeById
+import com.example.recipesapp.model.APP_PREFS
+import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.model.Ingredient
 import com.example.recipesapp.model.Recipe
 
-class RecipeViewModel : ViewModel() {
+class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _recipeState = MutableLiveData<RecipeState>()
     val recipeState: LiveData<RecipeState> get() = _recipeState
 
+    @SuppressLint("StaticFieldLeak")
+    private val context: Context = getApplication<Application>().applicationContext
+
     init {
         Log.i("!!!", "инициализация View Model")
-        _recipeState.value = RecipeState(isInFavorites = true)
     }
 
     data class RecipeState(
         val recipe: Recipe? = null,
-        val isInFavorites: Boolean = false,
-        val servingsCount: Int = 0,
+        val isFavorite: Boolean = false,
+        val portionsCount: Int = 0,
         val isServingsSelectorActive: Boolean = false,
         val ingredients: List<Ingredient> = emptyList(),
         val cookingMethod: List<String> = emptyList(),
     )
+
+    fun loadRecipe(recipeId: Int) {
+        // TODO load from network
+        _recipeState.value = RecipeState(recipe = getRecipeById(recipeId))
+        _recipeState.value = _recipeState.value?.copy(isFavorite = checkIsInFavorites(recipeId))
+        _recipeState.value = _recipeState.value?.copy(portionsCount = 0)
+    }
+
+    fun getFavorites(): MutableSet<String> {
+        val sharedPrefs = context.getSharedPreferences(
+            APP_PREFS, Context.MODE_PRIVATE
+        )
+        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
+    }
+
+    fun onFavoritesClicked() {
+        if (checkIsInFavorites(_recipeState.value?.recipe?.id)) {
+            _recipeState.value = _recipeState.value?.copy(isFavorite = false)
+            saveFavorites(getFavorites())
+        } else {
+            _recipeState.value = _recipeState.value?.copy(isFavorite = true)
+            saveFavorites(getFavorites())
+        }
+    }
+
+    private fun saveFavorites(favoritesList: Set<String>) {
+        val sharedPrefs = context.getSharedPreferences(
+            APP_PREFS, Context.MODE_PRIVATE
+        )
+        sharedPrefs.edit {
+            putStringSet(FAVORITES_LIST, favoritesList)
+        }
+    }
+
+    private fun checkIsInFavorites(recipeId: Int?): Boolean =
+        getFavorites().contains(recipeId.toString())
 }

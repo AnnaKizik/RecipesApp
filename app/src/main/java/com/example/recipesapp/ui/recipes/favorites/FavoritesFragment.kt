@@ -1,5 +1,6 @@
 package com.example.recipesapp.ui.recipes.favorites
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,11 @@ import androidx.fragment.app.replace
 import com.example.recipesapp.R
 import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentFavoritesBinding
+import com.example.recipesapp.model.APP_PREFS
 import com.example.recipesapp.model.ARG_RECIPE
+import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.example.recipesapp.ui.recipes.recipeslist.RecipesListAdapter
-import com.example.recipesapp.ui.recipes.recipe.getFavorites
 import java.lang.IllegalStateException
 
 class FavoritesFragment : Fragment() {
@@ -36,8 +38,7 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val context = context ?: return
-        val listOfFavorites = getFavorites(context)
+        val listOfFavorites = getFavoritesList()
         if (listOfFavorites.isEmpty()) {
             binding.rvFavorites.isVisible = false
             binding.tvFavoritesIsEmptyMessage.isVisible = true
@@ -74,5 +75,12 @@ class FavoritesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun getFavoritesList(): MutableSet<String> {
+        val sharedPrefs = requireContext().getSharedPreferences(
+            APP_PREFS, Context.MODE_PRIVATE
+        )
+        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
     }
 }
