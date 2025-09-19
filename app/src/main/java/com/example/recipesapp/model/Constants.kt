@@ -5,6 +5,7 @@ const val ARG_CATEGORY_NAME = "arg_category_name"
 const val ARG_CATEGORY_IMAGE_URL = "arg_category_image_url"
 
 const val ARG_RECIPE = "arg_recipe"
+const val ARG_RECIPE_ID = "arg_recipe_id"
 
 const val APP_PREFS = "sp_recipes_app"
 const val FAVORITES_LIST = "favorites_list"

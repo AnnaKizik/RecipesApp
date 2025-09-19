@@ -15,7 +15,7 @@ import com.example.recipesapp.databinding.FragmentRecipesListBinding
 import com.example.recipesapp.model.ARG_CATEGORY_ID
 import com.example.recipesapp.model.ARG_CATEGORY_IMAGE_URL
 import com.example.recipesapp.model.ARG_CATEGORY_NAME
-import com.example.recipesapp.model.ARG_RECIPE
+import com.example.recipesapp.model.ARG_RECIPE_ID
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 import java.lang.IllegalStateException
 
@@ -69,11 +69,8 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-
-        val recipe = STUB.getRecipeById(recipeId)
-
         val bundle = bundleOf(
-            ARG_RECIPE to recipe
+            ARG_RECIPE_ID to recipeId
         )
 
         parentFragmentManager.commit {
