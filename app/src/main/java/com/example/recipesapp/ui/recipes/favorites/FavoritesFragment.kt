@@ -14,7 +14,7 @@ import com.example.recipesapp.R
 import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentFavoritesBinding
 import com.example.recipesapp.model.APP_PREFS
-import com.example.recipesapp.model.ARG_RECIPE
+import com.example.recipesapp.model.ARG_RECIPE_ID
 import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.example.recipesapp.ui.recipes.recipeslist.RecipesListAdapter
@@ -60,10 +60,8 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
-
         val bundle = bundleOf(
-            ARG_RECIPE to recipe
+            ARG_RECIPE_ID to recipeId
         )
         parentFragmentManager.commit {
             replace<RecipeFragment>(R.id.mainContainer, args = bundle)
