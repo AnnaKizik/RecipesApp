@@ -73,7 +73,8 @@ object STUB {
                 "Смажьте верхнюю часть булочки майонезом, кетчупом и горчицей.",
                 "Положите верхнюю часть булочки на остальные ингредиенты и подавайте."
             ),
-            imageUrl = "burger-hamburger.png"
+            imageUrl = "burger-hamburger.png",
+            servings = 1
         ),
         Recipe(
             id = 1,

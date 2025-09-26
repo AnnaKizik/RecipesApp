@@ -1,7 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,10 +52,10 @@ class RecipeFragment() : Fragment() {
             val recipe = viewModel.recipeState.value?.recipe
             binding.tvRecipeName.text = recipe?.title
 
-            if (!recipe?.imageUrl.isNullOrEmpty()) {
-                loadRecipeCoverFromAssets(recipe.imageUrl)
-            } else {
+            if (viewModel.recipeState.value?.recipeImage == null) {
                 binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
+            } else {
+                binding.ivRecipeCover.setImageDrawable(viewModel.recipeState.value?.recipeImage)
             }
 
             binding.btnFavorites.apply {
@@ -117,13 +116,6 @@ class RecipeFragment() : Fragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
-    }
-
-    private fun loadRecipeCoverFromAssets(imageUrl: String) {
-        val recipeCover = requireContext().assets.open(imageUrl).use { inputStream ->
-            Drawable.createFromStream(inputStream, null)
-        }
-        binding.ivRecipeCover.setImageDrawable(recipeCover)
     }
 
     override fun onDestroyView() {
