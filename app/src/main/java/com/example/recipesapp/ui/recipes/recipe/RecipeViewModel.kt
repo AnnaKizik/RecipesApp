@@ -37,7 +37,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val recipeImage: Drawable?
     )
 
-    fun loadRecipe(recipeId: Int): RecipeState {
+    fun loadRecipe(recipeId: Int) {
         // TODO load from network
         val recipe = getRecipeById(recipeId)
         val recipeImage = try {
@@ -52,12 +52,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             null
         }
 
-        return RecipeState(
+        _recipeState.value = RecipeState(
             recipe = recipe,
             isFavorite = checkIsInFavorites(recipeId),
             portionsCount = recipe?.servings ?: 1,
             recipeImage = recipeImage
         )
+
     }
 
     fun getFavorites(): MutableSet<String> {

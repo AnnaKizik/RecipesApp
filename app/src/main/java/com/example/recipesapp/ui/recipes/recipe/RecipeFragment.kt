@@ -46,6 +46,7 @@ class RecipeFragment() : Fragment() {
     }
 
     private fun initUi() {
+
         viewModel.recipeState.observe(viewLifecycleOwner, Observer {
             Log.i("!!!", "isFavorite:${it.isFavorite}")
 
@@ -71,6 +72,7 @@ class RecipeFragment() : Fragment() {
                 recipe?.ingredients ?: emptyList(),
                 recipe?.method ?: emptyList()
             )
+
         })
     }
 
