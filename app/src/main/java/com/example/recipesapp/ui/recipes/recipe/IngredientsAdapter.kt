@@ -9,10 +9,10 @@ import com.example.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val dataSet: List<Ingredient>) :
+class IngredientsAdapter(private val dataSet: List<Ingredient>, portionsCount: Int) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    private var quantity: Int = 1
+    private var quantity: Int = portionsCount
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateIngredients(progress: Int) {
