@@ -3,6 +3,7 @@ package com.example.recipesapp.ui.recipes.recipe
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
@@ -33,13 +34,31 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isServingsSelectorActive: Boolean = false,
         val ingredients: List<Ingredient> = emptyList(),
         val cookingMethod: List<String> = emptyList(),
+        val recipeImage: Drawable?
     )
 
     fun loadRecipe(recipeId: Int) {
         // TODO load from network
-        _recipeState.value = RecipeState(recipe = getRecipeById(recipeId))
-        _recipeState.value = _recipeState.value?.copy(isFavorite = checkIsInFavorites(recipeId))
-        _recipeState.value = _recipeState.value?.copy(portionsCount = _recipeState.value?.portionsCount ?: 1)
+        val recipe = getRecipeById(recipeId)
+        val recipeImage = try {
+            val imagePath = recipe?.imageUrl
+            if (!imagePath.isNullOrEmpty()) {
+                context.assets.open(imagePath).use { inputStream ->
+                    Drawable.createFromStream(inputStream, null)
+                }
+            } else null
+        } catch (e: Exception) {
+            Log.e("RecipeLoad", "Ошибка при загрузке изображения рецепта: ${e.message}", e)
+            null
+        }
+
+        _recipeState.value = RecipeState(
+            recipe = recipe,
+            isFavorite = checkIsInFavorites(recipeId),
+            portionsCount = recipe?.servings ?: 1,
+            recipeImage = recipeImage
+        )
+
     }
 
     fun getFavorites(): MutableSet<String> {
