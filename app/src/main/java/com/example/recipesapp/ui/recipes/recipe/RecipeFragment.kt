@@ -67,58 +67,52 @@ class RecipeFragment() : Fragment() {
                 }
             }
 
-            initRecycler(state)
-
-        })
-    }
-
-    private fun initRecycler(
-        state: RecipeViewModel.RecipeState
-    ) {
-        val recipe = state.recipe
-
-        val ingredientsAdapter =
-            IngredientsAdapter(recipe?.ingredients ?: emptyList(), state.portionsCount)
-        val ingredientsDivider =
-            MaterialDividerItemDecoration(
-                binding.rvIngredients.context,
-                LinearLayout.VERTICAL
-            ).apply {
-                setDividerColorResource(binding.rvIngredients.context, R.color.divider_color)
-                isLastItemDecorated = false
-            }
-        with(binding) {
-            rvIngredients.adapter = ingredientsAdapter
-            rvIngredients.addItemDecoration(ingredientsDivider)
-        }
-
-        val methodAdapter = MethodAdapter(recipe?.method ?: emptyList())
-        val methodDivider =
-            MaterialDividerItemDecoration(binding.rvMethod.context, LinearLayout.VERTICAL).apply {
-                setDividerColorResource(binding.rvMethod.context, R.color.divider_color)
-                isLastItemDecorated = false
-            }
-        with(binding) {
-            rvMethod.adapter = methodAdapter
-            rvMethod.addItemDecoration(methodDivider)
-            sbServingsCount.progress = state.portionsCount
-            tvServingCount.text = state.portionsCount.toString()
-            sbServingsCount.setOnSeekBarChangeListener(object :
-                SeekBar.OnSeekBarChangeListener {
-                @SuppressLint("SetTextI18n")
-                override fun onProgressChanged(
-                    seekBar: SeekBar,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    viewModel.updatePortionsCount(progress)
+            val ingredientsAdapter =
+                IngredientsAdapter(recipe?.ingredients ?: emptyList(), state.portionsCount)
+            val ingredientsDivider =
+                MaterialDividerItemDecoration(
+                    binding.rvIngredients.context,
+                    LinearLayout.VERTICAL
+                ).apply {
+                    setDividerColorResource(binding.rvIngredients.context, R.color.divider_color)
+                    isLastItemDecorated = false
                 }
+            with(binding) {
+                rvIngredients.adapter = ingredientsAdapter
+                rvIngredients.addItemDecoration(ingredientsDivider)
+            }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            val methodAdapter = MethodAdapter(recipe?.method ?: emptyList())
+            val methodDivider =
+                MaterialDividerItemDecoration(
+                    binding.rvMethod.context,
+                    LinearLayout.VERTICAL
+                ).apply {
+                    setDividerColorResource(binding.rvMethod.context, R.color.divider_color)
+                    isLastItemDecorated = false
+                }
+            with(binding) {
+                rvMethod.adapter = methodAdapter
+                rvMethod.addItemDecoration(methodDivider)
+                sbServingsCount.progress = state.portionsCount
+                tvServingCount.text = state.portionsCount.toString()
+                sbServingsCount.setOnSeekBarChangeListener(object :
+                    SeekBar.OnSeekBarChangeListener {
+                    @SuppressLint("SetTextI18n")
+                    override fun onProgressChanged(
+                        seekBar: SeekBar,
+                        progress: Int,
+                        fromUser: Boolean
+                    ) {
+                        viewModel.updatePortionsCount(progress)
+                    }
 
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
-            })
-        }
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                })
+            }
+        })
     }
 
     override fun onDestroyView() {

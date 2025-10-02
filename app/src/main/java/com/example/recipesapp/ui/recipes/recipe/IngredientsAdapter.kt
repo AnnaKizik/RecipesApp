@@ -14,12 +14,6 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>, portionsCount: I
 
     private var quantity: Int = portionsCount
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateIngredients(progress: Int) {
-        quantity = progress
-        notifyDataSetChanged()
-    }
-
     class ViewHolder(val binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(ingredient: Ingredient, quantity: Int) {
