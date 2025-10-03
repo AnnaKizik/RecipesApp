@@ -16,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.recipesapp.R
 import com.example.recipesapp.model.ARG_RECIPE_ID
-import com.example.recipesapp.model.Ingredient
 
 class RecipeFragment() : Fragment() {
 
@@ -47,20 +46,20 @@ class RecipeFragment() : Fragment() {
 
     private fun initUi() {
 
-        viewModel.recipeState.observe(viewLifecycleOwner, Observer {
-            Log.i("!!!", "isFavorite:${it.isFavorite}")
+        viewModel.recipeState.observe(viewLifecycleOwner, Observer { state ->
+            Log.i("!!!", "isFavorite:${state.isFavorite}")
 
-            val recipe = viewModel.recipeState.value?.recipe
+            val recipe = state.recipe
             binding.tvRecipeName.text = recipe?.title
 
-            if (viewModel.recipeState.value?.recipeImage == null) {
+            if (state.recipeImage == null) {
                 binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
             } else {
-                binding.ivRecipeCover.setImageDrawable(viewModel.recipeState.value?.recipeImage)
+                binding.ivRecipeCover.setImageDrawable(state.recipeImage)
             }
 
             binding.btnFavorites.apply {
-                if (viewModel.recipeState.value?.isFavorite == true) setImageResource(R.drawable.ic_heart)
+                if (state.isFavorite) setImageResource(R.drawable.ic_heart)
                 else setImageResource(R.drawable.ic_heart_empty)
 
                 setOnClickListener {
@@ -68,55 +67,51 @@ class RecipeFragment() : Fragment() {
                 }
             }
 
-            initRecycler(
-                recipe?.ingredients ?: emptyList(),
-                recipe?.method ?: emptyList()
-            )
-
-        })
-    }
-
-    private fun initRecycler(ingredientsData: List<Ingredient>, methodData: List<String>) {
-        val ingredientsAdapter = IngredientsAdapter(ingredientsData)
-        val ingredientsDivider =
-            MaterialDividerItemDecoration(
-                binding.rvIngredients.context,
-                LinearLayout.VERTICAL
-            ).apply {
-                setDividerColorResource(binding.rvIngredients.context, R.color.divider_color)
-                isLastItemDecorated = false
-            }
-        with(binding) {
-            rvIngredients.adapter = ingredientsAdapter
-            rvIngredients.addItemDecoration(ingredientsDivider)
-        }
-
-        val methodAdapter = MethodAdapter(methodData)
-        val methodDivider =
-            MaterialDividerItemDecoration(binding.rvMethod.context, LinearLayout.VERTICAL).apply {
-                setDividerColorResource(binding.rvMethod.context, R.color.divider_color)
-                isLastItemDecorated = false
-            }
-        with(binding) {
-            rvMethod.adapter = methodAdapter
-            rvMethod.addItemDecoration(methodDivider)
-        }
-
-        binding.sbServingsCount.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("SetTextI18n")
-            override fun onProgressChanged(
-                seekBar: SeekBar,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-                binding.tvServingCount.text = progress.toString()
-                ingredientsAdapter.updateIngredients(progress)
+            val ingredientsAdapter =
+                IngredientsAdapter(recipe?.ingredients ?: emptyList(), state.portionsCount)
+            val ingredientsDivider =
+                MaterialDividerItemDecoration(
+                    binding.rvIngredients.context,
+                    LinearLayout.VERTICAL
+                ).apply {
+                    setDividerColorResource(binding.rvIngredients.context, R.color.divider_color)
+                    isLastItemDecorated = false
+                }
+            with(binding) {
+                rvIngredients.adapter = ingredientsAdapter
+                rvIngredients.addItemDecoration(ingredientsDivider)
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            val methodAdapter = MethodAdapter(recipe?.method ?: emptyList())
+            val methodDivider =
+                MaterialDividerItemDecoration(
+                    binding.rvMethod.context,
+                    LinearLayout.VERTICAL
+                ).apply {
+                    setDividerColorResource(binding.rvMethod.context, R.color.divider_color)
+                    isLastItemDecorated = false
+                }
+            with(binding) {
+                rvMethod.adapter = methodAdapter
+                rvMethod.addItemDecoration(methodDivider)
+                sbServingsCount.progress = state.portionsCount
+                tvServingCount.text = state.portionsCount.toString()
+                sbServingsCount.setOnSeekBarChangeListener(object :
+                    SeekBar.OnSeekBarChangeListener {
+                    @SuppressLint("SetTextI18n")
+                    override fun onProgressChanged(
+                        seekBar: SeekBar,
+                        progress: Int,
+                        fromUser: Boolean
+                    ) {
+                        viewModel.updatePortionsCount(progress)
+                    }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                    override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                })
+            }
         })
     }
 

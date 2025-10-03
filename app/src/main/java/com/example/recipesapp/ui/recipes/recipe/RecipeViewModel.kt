@@ -92,4 +92,11 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun checkIsInFavorites(recipeId: Int?): Boolean =
         getFavorites().contains(recipeId.toString())
+
+    fun updatePortionsCount(portionsCount: Int) {
+        val currentState = _recipeState.value
+        currentState?.let { state ->
+            _recipeState.value = state.copy(portionsCount = portionsCount)
+        }
+    }
 }
