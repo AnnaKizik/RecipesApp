@@ -1,6 +1,5 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +15,22 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.recipesapp.R
 import com.example.recipesapp.model.ARG_RECIPE_ID
+
+class PortionSeekBarListener(
+    val onChangeIngredients: (Int) -> Unit
+) : SeekBar.OnSeekBarChangeListener {
+    override fun onProgressChanged(
+        seekBar: SeekBar?,
+        progress: Int,
+        fromUser: Boolean
+    ) {
+        onChangeIngredients(progress)
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+    override fun onStopTrackingTouch(seekBar: SeekBar) {}
+}
 
 class RecipeFragment() : Fragment() {
 
@@ -46,6 +61,13 @@ class RecipeFragment() : Fragment() {
 
     private fun initUi() {
 
+        val ingredientsAdapter =
+            IngredientsAdapter(
+                emptyList(),
+                1
+            )
+        val methodAdapter = MethodAdapter(emptyList())
+
         viewModel.recipeState.observe(viewLifecycleOwner, Observer { state ->
             Log.i("!!!", "isFavorite:${state.isFavorite}")
 
@@ -67,8 +89,11 @@ class RecipeFragment() : Fragment() {
                 }
             }
 
-            val ingredientsAdapter =
-                IngredientsAdapter(recipe?.ingredients ?: emptyList(), state.portionsCount)
+            ingredientsAdapter.updateData(
+                ingredients = recipe?.ingredients ?: emptyList(),
+                portionsCount = state.portionsCount
+            )
+
             val ingredientsDivider =
                 MaterialDividerItemDecoration(
                     binding.rvIngredients.context,
@@ -80,9 +105,14 @@ class RecipeFragment() : Fragment() {
             with(binding) {
                 rvIngredients.adapter = ingredientsAdapter
                 rvIngredients.addItemDecoration(ingredientsDivider)
+                sbServingsCount.progress = state.portionsCount
+                tvServingCount.text = state.portionsCount.toString()
+                sbServingsCount.setOnSeekBarChangeListener(PortionSeekBarListener {
+                    viewModel.updatePortionsCount(it)
+                })
             }
 
-            val methodAdapter = MethodAdapter(recipe?.method ?: emptyList())
+            methodAdapter.dataSet = recipe?.method ?: emptyList()
             val methodDivider =
                 MaterialDividerItemDecoration(
                     binding.rvMethod.context,
@@ -94,23 +124,6 @@ class RecipeFragment() : Fragment() {
             with(binding) {
                 rvMethod.adapter = methodAdapter
                 rvMethod.addItemDecoration(methodDivider)
-                sbServingsCount.progress = state.portionsCount
-                tvServingCount.text = state.portionsCount.toString()
-                sbServingsCount.setOnSeekBarChangeListener(object :
-                    SeekBar.OnSeekBarChangeListener {
-                    @SuppressLint("SetTextI18n")
-                    override fun onProgressChanged(
-                        seekBar: SeekBar,
-                        progress: Int,
-                        fromUser: Boolean
-                    ) {
-                        viewModel.updatePortionsCount(progress)
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar) {}
-                })
             }
         })
     }
@@ -119,4 +132,5 @@ class RecipeFragment() : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

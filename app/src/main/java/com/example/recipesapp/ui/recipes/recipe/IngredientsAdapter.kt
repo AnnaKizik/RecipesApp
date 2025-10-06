@@ -9,10 +9,15 @@ import com.example.recipesapp.model.Ingredient
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class IngredientsAdapter(private val dataSet: List<Ingredient>, portionsCount: Int) :
+class IngredientsAdapter(var dataSet: List<Ingredient>, var portionsCount: Int) :
     RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
-    private var quantity: Int = portionsCount
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(ingredients: List<Ingredient>, portionsCount: Int) {
+        this.dataSet = ingredients
+        this.portionsCount = portionsCount
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(val binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
@@ -38,7 +43,7 @@ class IngredientsAdapter(private val dataSet: List<Ingredient>, portionsCount: I
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(dataSet[position], quantity)
+        viewHolder.bind(dataSet[position], portionsCount)
     }
 
     override fun getItemCount() = dataSet.size
