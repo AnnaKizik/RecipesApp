@@ -1,5 +1,6 @@
 package com.example.recipesapp.ui.categories
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,8 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.databinding.ItemCategoryBinding
 import com.example.recipesapp.model.Category
 
-class CategoriesListAdapter(private val dataSet: List<Category>) :
+class CategoriesListAdapter(var dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(categoriesList: List<Category>) {
+        this.dataSet = categoriesList
+        notifyDataSetChanged()
+    }
 
     interface OnItemClickListener {
         fun onItemClick(categoryId: Int)
@@ -30,7 +37,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
                     null
                 )
             } catch (e: Exception) {
-                Log.d("!!!", "Image not found: ${category.imageUrl}")
+                Log.d("!!!", "Image not found: ${category.imageUrl}", e)
                 null
             }
             binding.imCategoryImage.setImageDrawable(drawable)
