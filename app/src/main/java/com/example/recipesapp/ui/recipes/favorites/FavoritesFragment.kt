@@ -1,6 +1,5 @@
 package com.example.recipesapp.ui.recipes.favorites
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +9,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.recipesapp.R
-import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentFavoritesBinding
-import com.example.recipesapp.model.APP_PREFS
 import com.example.recipesapp.model.ARG_RECIPE_ID
-import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
 import com.example.recipesapp.ui.recipes.recipeslist.RecipesListAdapter
 import java.lang.IllegalStateException
@@ -26,6 +24,8 @@ class FavoritesFragment : Fragment() {
         get() = _binding ?: throw IllegalStateException(
             "Binding for FragmentFavoritesBinding must not be null"
         )
+
+    private val viewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,23 +38,29 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val listOfFavorites = getFavoritesList()
-        if (listOfFavorites.isEmpty()) {
-            binding.rvFavorites.isVisible = false
-            binding.tvFavoritesIsEmptyMessage.isVisible = true
-        } else {
-            initRecycler(listOfFavorites)
-            binding.tvFavoritesIsEmptyMessage.isVisible = false
-        }
+        viewModel.loadFavorites()
+        initUi()
     }
 
-    private fun initRecycler(listOfFavorites: MutableSet<String>) {
-        val recipesAdapter = RecipesListAdapter(STUB.getRecipesByIds(listOfFavorites))
-        binding.rvFavorites.adapter = recipesAdapter
-        recipesAdapter.setOnItemClickListener(object :
-            RecipesListAdapter.OnItemClickListener {
-            override fun onItemClick(recipeId: Int) {
-                openRecipeByRecipeId(recipeId)
+    private fun initUi() {
+        val favoriteRecipesAdapter = RecipesListAdapter(emptyList())
+
+        viewModel.favoritesState.observe(viewLifecycleOwner, Observer { state ->
+            val listOfFavorites = viewModel.favoritesState.value?.favoritesList ?: emptyList()
+            favoriteRecipesAdapter.updateData(listOfFavorites)
+
+            if (listOfFavorites.isEmpty()) {
+                binding.rvFavorites.isVisible = false
+                binding.tvFavoritesIsEmptyMessage.isVisible = true
+            } else {
+                binding.rvFavorites.adapter = favoriteRecipesAdapter
+                favoriteRecipesAdapter.setOnItemClickListener(object :
+                    RecipesListAdapter.OnItemClickListener {
+                    override fun onItemClick(recipeId: Int) {
+                        openRecipeByRecipeId(recipeId)
+                    }
+                })
+                binding.tvFavoritesIsEmptyMessage.isVisible = false
             }
         })
     }
@@ -75,10 +81,4 @@ class FavoritesFragment : Fragment() {
         _binding = null
     }
 
-    fun getFavoritesList(): MutableSet<String> {
-        val sharedPrefs = requireContext().getSharedPreferences(
-            APP_PREFS, Context.MODE_PRIVATE
-        )
-        return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
-    }
 }
