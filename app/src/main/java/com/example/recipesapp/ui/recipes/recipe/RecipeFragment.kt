@@ -13,8 +13,8 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.lang.IllegalStateException
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.example.recipesapp.R
-import com.example.recipesapp.model.ARG_RECIPE_ID
 
 class PortionSeekBarListener(
     val onChangeIngredients: (Int) -> Unit
@@ -41,6 +41,7 @@ class RecipeFragment() : Fragment() {
         )
 
     private val viewModel: RecipeViewModel by viewModels()
+    private val recipeFragmentArgs: RecipeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +55,8 @@ class RecipeFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipeId = arguments?.getInt(ARG_RECIPE_ID)
-        viewModel.loadRecipe(recipeId ?: 0)
+        val recipeId = recipeFragmentArgs.recipeId
+        viewModel.loadRecipe(recipeId)
         initUi()
     }
 

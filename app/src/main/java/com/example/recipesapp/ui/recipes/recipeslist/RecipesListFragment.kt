@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentRecipesListBinding
 import com.example.recipesapp.model.ARG_CATEGORY_ID
-import com.example.recipesapp.model.ARG_RECIPE_ID
 import java.lang.IllegalStateException
 
 class RecipesListFragment : Fragment() {
@@ -68,11 +66,11 @@ class RecipesListFragment : Fragment() {
     }
 
     private fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = bundleOf(
-            ARG_RECIPE_ID to recipeId
+        findNavController().navigate(
+            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
+                recipeId
+            )
         )
-
-        findNavController().navigate(R.id.recipeFragment, bundle)
     }
 
     override fun onDestroyView() {
