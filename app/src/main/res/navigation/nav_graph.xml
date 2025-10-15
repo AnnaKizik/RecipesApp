@@ -53,6 +53,10 @@
         android:name="com.example.recipesapp.ui.recipes.recipeslist.RecipesListFragment"
         android:label="RecipesListFragment"
         tools:layout="@layout/fragment_recipes_list" >
+        <argument
+            android:name="categoryId"
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/action_recipesListFragment_to_categoriesListFragment"
             app:destination="@id/categoriesListFragment" />

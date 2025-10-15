@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentRecipesListBinding
-import com.example.recipesapp.model.ARG_CATEGORY_ID
 import java.lang.IllegalStateException
 
 class RecipesListFragment : Fragment() {
@@ -21,6 +21,7 @@ class RecipesListFragment : Fragment() {
         )
 
     private val viewModel: RecipesListViewModel by viewModels()
+    private val recipesListFragmentArgs: RecipesListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +34,7 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val categoryId = requireArguments().getInt(ARG_CATEGORY_ID)
+        val categoryId = recipesListFragmentArgs.categoryId
         viewModel.loadRecipesListForCategory(categoryId)
         initUi()
     }
