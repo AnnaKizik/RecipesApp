@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
-import com.example.recipesapp.model.ARG_CATEGORY_ID
 import java.lang.IllegalStateException
 
 class CategoriesListFragment : Fragment() {
@@ -59,11 +56,10 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-
-        val bundle = bundleOf(
-            ARG_CATEGORY_ID to categoryId,
+        findNavController().navigate(
+            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                categoryId
+            )
         )
-
-        findNavController().navigate(R.id.recipesListFragment, bundle)
     }
 }
