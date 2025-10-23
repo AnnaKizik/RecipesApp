@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.recipesapp.data.STUB
 import com.example.recipesapp.data.STUB.getRecipesByCategoryId
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
@@ -28,9 +27,8 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         val recipesList: List<Recipe> = emptyList()
     )
 
-    fun loadRecipesListForCategory(categoryId: Int?) {
+    fun loadRecipesListForCategory(category: Category) {
 
-        val category = STUB.getCategories().first { it.id == categoryId }
         val categoryImage = try {
             val imagePath = category.imageUrl
             if (imagePath.isNotEmpty()) {
@@ -42,7 +40,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             Log.e("CategoryLoad", "Ошибка при загрузке изображения категории: ${e.message}", e)
             null
         }
-        val recipesList = getRecipesByCategoryId(categoryId)
+        val recipesList = getRecipesByCategoryId(category.id)
 
         _recipesListState.value = RecipesListState(
             category = category,

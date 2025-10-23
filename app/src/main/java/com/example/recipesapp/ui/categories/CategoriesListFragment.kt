@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 import java.lang.IllegalStateException
 
@@ -56,9 +57,12 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
+        val category =
+            STUB.getCategories().find { it.id == categoryId }
+                ?: throw IllegalArgumentException("Категория с id $categoryId не обнаружена!")
         findNavController().navigate(
             CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                categoryId
+                category
             )
         )
     }
