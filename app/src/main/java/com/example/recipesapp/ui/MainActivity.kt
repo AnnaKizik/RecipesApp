@@ -1,6 +1,7 @@
 package com.example.recipesapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -8,6 +9,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ActivityMainBinding
+import kotlinx.serialization.json.Json
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -20,6 +24,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val thread = Thread {
+            val url = URL("https://recipes.androidsprint.ru/api/category")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.connect()
+            val body = connection.inputStream.bufferedReader().readText()
+            val json = Json {
+                ignoreUnknownKeys = true
+            }
+
+            Log.i("!!!", "responseCode: ${connection.responseCode}")
+            Log.i("!!!", "responseMessage: ${connection.responseMessage}")
+            Log.i("!!!", "Body: $body")
+            Log.i("Thread", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+
+            val categories = json.decodeFromString<String>(body)
+        }
+        thread.start()
+        Log.i("Thread", "Метод onCreate() выполняется на потоке: ${thread.name}")
 
         enableEdgeToEdge()
 
