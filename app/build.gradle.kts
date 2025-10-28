@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.retrofit.v300)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

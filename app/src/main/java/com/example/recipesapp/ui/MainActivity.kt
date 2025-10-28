@@ -1,6 +1,8 @@
 package com.example.recipesapp.ui
 
+import android.adservices.adselection.GetAdSelectionDataRequest
 import android.os.Bundle
+import android.telecom.Call
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +10,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import com.example.recipesapp.R
+import com.example.recipesapp.RecipeApiService
 import com.example.recipesapp.databinding.ActivityMainBinding
 import com.example.recipesapp.model.Category
 import kotlinx.serialization.json.Json
+import retrofit2.Retrofit
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
@@ -29,6 +33,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val thread = Thread {
+
+            val retrofit: Retrofit = Builder()
+                .baseUrl("https://recipes.androidsprint.ru/api/")
+                .build()
+
+            val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+
+            val categoriesCall: Call<List<Category>> = service.getCategories()
+            val categoriesResponse = categoriesCall.execute()
+
+
             val url = URL("https://recipes.androidsprint.ru/api/category")
             val connection = url.openConnection() as HttpURLConnection
             connection.connect()
