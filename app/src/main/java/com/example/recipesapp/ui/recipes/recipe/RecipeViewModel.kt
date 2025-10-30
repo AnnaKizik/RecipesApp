@@ -3,7 +3,6 @@ package com.example.recipesapp.ui.recipes.recipe
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.edit
@@ -13,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.recipesapp.RecipesRepository
 import com.example.recipesapp.ThreadPool
 import com.example.recipesapp.model.APP_PREFS
+import com.example.recipesapp.model.BASE_URL
 import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.model.Ingredient
 import com.example.recipesapp.model.Recipe
@@ -38,7 +38,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isServingsSelectorActive: Boolean = false,
         val ingredients: List<Ingredient> = emptyList(),
         val cookingMethod: List<String> = emptyList(),
-        val recipeImage: Drawable?
+        val recipeImageUrl: String?
     )
 
     fun loadRecipe(recipeId: Int) {
@@ -48,23 +48,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                 "Ошибка получения данных",
                 Toast.LENGTH_SHORT
             ).show()
-            val recipeImage = try {
-                val imagePath = recipe?.imageUrl
-                if (!imagePath.isNullOrEmpty()) {
-                    context.assets.open(imagePath).use { inputStream ->
-                        Drawable.createFromStream(inputStream, null)
-                    }
-                } else null
-            } catch (e: Exception) {
-                Log.e("RecipeLoad", "Ошибка при загрузке изображения рецепта: ${e.message}", e)
-                null
-            }
-
+            val imageUrl = BASE_URL + recipe?.imageUrl
             _recipeState.value = RecipeState(
                 recipe = recipe,
                 isFavorite = checkIsInFavorites(recipeId),
                 portionsCount = recipe?.servings ?: 1,
-                recipeImage = recipeImage
+                recipeImageUrl = imageUrl
             )
         }
     }

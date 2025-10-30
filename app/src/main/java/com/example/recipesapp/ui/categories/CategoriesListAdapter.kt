@@ -6,7 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ItemCategoryBinding
+import com.example.recipesapp.model.BASE_URL
 import com.example.recipesapp.model.Category
 
 class CategoriesListAdapter(var dataSet: List<Category>) :
@@ -55,6 +58,13 @@ class CategoriesListAdapter(var dataSet: List<Category>) :
         viewHolder.itemView.setOnClickListener { category ->
             itemClickListener?.onItemClick(dataSet[position].id)
         }
+        val imageFullUrl = BASE_URL + dataSet[position].imageUrl
+
+        Glide.with(viewHolder.itemView.context)
+            .load(imageFullUrl)
+            .placeholder(R.drawable.img_placeholder)
+            .error(R.drawable.img_error)
+            .into(viewHolder.binding.imCategoryImage)
     }
 
     override fun getItemCount() = dataSet.size
