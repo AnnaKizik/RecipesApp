@@ -5,17 +5,21 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.recipesapp.data.STUB.getRecipeById
+import com.example.recipesapp.RecipesRepository
+import com.example.recipesapp.ThreadPool
 import com.example.recipesapp.model.APP_PREFS
 import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.model.Ingredient
 import com.example.recipesapp.model.Recipe
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository = RecipesRepository(ThreadPool.threadPool)
 
     private val _recipeState = MutableLiveData<RecipeState>()
     val recipeState: LiveData<RecipeState> get() = _recipeState
@@ -38,27 +42,31 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     )
 
     fun loadRecipe(recipeId: Int) {
-        // TODO load from network
-        val recipe = getRecipeById(recipeId)
-        val recipeImage = try {
-            val imagePath = recipe?.imageUrl
-            if (!imagePath.isNullOrEmpty()) {
-                context.assets.open(imagePath).use { inputStream ->
-                    Drawable.createFromStream(inputStream, null)
-                }
-            } else null
-        } catch (e: Exception) {
-            Log.e("RecipeLoad", "Ошибка при загрузке изображения рецепта: ${e.message}", e)
-            null
+        repository.loadRecipeById(recipeId) { recipe ->
+            if (recipe == null) Toast.makeText(
+                context,
+                "Ошибка получения данных",
+                Toast.LENGTH_SHORT
+            ).show()
+            val recipeImage = try {
+                val imagePath = recipe?.imageUrl
+                if (!imagePath.isNullOrEmpty()) {
+                    context.assets.open(imagePath).use { inputStream ->
+                        Drawable.createFromStream(inputStream, null)
+                    }
+                } else null
+            } catch (e: Exception) {
+                Log.e("RecipeLoad", "Ошибка при загрузке изображения рецепта: ${e.message}", e)
+                null
+            }
+
+            _recipeState.value = RecipeState(
+                recipe = recipe,
+                isFavorite = checkIsInFavorites(recipeId),
+                portionsCount = recipe?.servings ?: 1,
+                recipeImage = recipeImage
+            )
         }
-
-        _recipeState.value = RecipeState(
-            recipe = recipe,
-            isFavorite = checkIsInFavorites(recipeId),
-            portionsCount = recipe?.servings ?: 1,
-            recipeImage = recipeImage
-        )
-
     }
 
     fun getFavorites(): MutableSet<String> {
