@@ -9,17 +9,18 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.RecipesRepository
-import com.example.recipesapp.ThreadPool
 import com.example.recipesapp.model.APP_PREFS
 import com.example.recipesapp.model.BASE_URL
 import com.example.recipesapp.model.FAVORITES_LIST
 import com.example.recipesapp.model.Ingredient
 import com.example.recipesapp.model.Recipe
+import kotlinx.coroutines.launch
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = RecipesRepository(ThreadPool.threadPool)
+    private val repository = RecipesRepository()
 
     private val _recipeState = MutableLiveData<RecipeState>()
     val recipeState: LiveData<RecipeState> get() = _recipeState
@@ -42,19 +43,23 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     )
 
     fun loadRecipe(recipeId: Int) {
-        repository.loadRecipeById(recipeId) { recipe ->
-            if (recipe == null) Toast.makeText(
-                context,
-                "Ошибка получения данных",
-                Toast.LENGTH_SHORT
-            ).show()
-            val imageUrl = BASE_URL + recipe?.imageUrl
-            _recipeState.value = RecipeState(
-                recipe = recipe,
-                isFavorite = checkIsInFavorites(recipeId),
-                portionsCount = recipe?.servings ?: 1,
-                recipeImageUrl = imageUrl
-            )
+        viewModelScope.launch {
+            try {
+                val recipe = repository.loadRecipeById(recipeId)
+                val imageUrl = BASE_URL + recipe?.imageUrl
+                _recipeState.value = RecipeState(
+                    recipe = recipe,
+                    isFavorite = checkIsInFavorites(recipeId),
+                    portionsCount = recipe?.servings ?: 1,
+                    recipeImageUrl = imageUrl
+                )
+            } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    "Ошибка получения данных: $e",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

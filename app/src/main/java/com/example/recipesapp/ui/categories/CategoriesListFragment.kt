@@ -57,13 +57,16 @@ class CategoriesListFragment : Fragment() {
 
     private fun openRecipesByCategoryId(categoryId: Int) {
         viewModel.loadCategoryById(categoryId)
-        val category =
-            viewModel.categoriesListState.value?.selectedCategory
-                ?: throw IllegalArgumentException("Категория с id $categoryId не обнаружена!")
-        findNavController().navigate(
-            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                category
-            )
-        )
+        viewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
+            state.selectedCategory?.let { category ->
+                findNavController().navigate(
+                    CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                        category
+                    )
+                )
+                viewModel.clearSelectedCategory()
+            }
+        }
     }
+
 }
