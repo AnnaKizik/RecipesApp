@@ -14,6 +14,7 @@ import java.lang.IllegalStateException
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.recipesapp.R
 
 class PortionSeekBarListener(
@@ -54,7 +55,6 @@ class RecipeFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val recipeId = recipeFragmentArgs.recipeId
         viewModel.loadRecipe(recipeId)
         initUi()
@@ -72,14 +72,14 @@ class RecipeFragment() : Fragment() {
         viewModel.recipeState.observe(viewLifecycleOwner, Observer { state ->
             Log.i("!!!", "isFavorite:${state.isFavorite}")
 
+                Glide.with(this)
+                    .load(state.recipeImageUrl)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(binding.ivRecipeCover)
+
             val recipe = state.recipe
             binding.tvRecipeName.text = recipe?.title
-
-            if (state.recipeImage == null) {
-                binding.ivRecipeCover.setImageResource(R.drawable.bcg_default)
-            } else {
-                binding.ivRecipeCover.setImageDrawable(state.recipeImage)
-            }
 
             binding.btnFavorites.apply {
                 if (state.isFavorite) setImageResource(R.drawable.ic_heart)

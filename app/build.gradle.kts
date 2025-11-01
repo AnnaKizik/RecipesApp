@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id ("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-    kotlin("plugin.serialization") version "2.0.21"
+    kotlin("plugin.serialization")
 }
 
 kotlin{
@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.serialization.json)
+    implementation (libs.glide)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit.v300)
     implementation(libs.androidx.fragment.ktx)

@@ -28,13 +28,9 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     fun loadCategoriesList() {
         repository.loadCategories { categories ->
-            if (categories == null) Toast.makeText(
-                context,
-                "Ошибка получения данных",
-                Toast.LENGTH_SHORT
-            ).show()
-            _categoriesListState.value =
+            _categoriesListState.postValue(
                 CategoriesListState(categoriesList = categories ?: emptyList())
+            )
         }
     }
 

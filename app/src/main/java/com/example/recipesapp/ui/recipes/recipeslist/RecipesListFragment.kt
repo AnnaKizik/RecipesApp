@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentRecipesListBinding
 import java.lang.IllegalStateException
@@ -54,11 +55,11 @@ class RecipesListFragment : Fragment() {
             val category = state.category
             binding.tvRecipeCategoryName.text = category?.title
 
-            if (state.categoryImage == null) {
-                binding.ivRecipeCategoryCover.setImageResource(R.drawable.bcg_default)
-            } else {
-                binding.ivRecipeCategoryCover.setImageDrawable(state.categoryImage)
-            }
+            Glide.with(this)
+                .load(state.categoryImageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipeCategoryCover)
 
             recipesListAdapter.updateData(
                 recipesList = state.recipesList

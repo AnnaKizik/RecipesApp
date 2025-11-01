@@ -3,14 +3,13 @@ package com.example.recipesapp.ui.recipes.recipeslist
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.recipesapp.RecipesRepository
 import com.example.recipesapp.ThreadPool
+import com.example.recipesapp.model.BASE_URL
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 
@@ -26,22 +25,12 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     data class RecipesListState(
         val category: Category? = null,
-        val categoryImage: Drawable?,
+        val categoryImageUrl: String?,
         val recipesList: List<Recipe> = emptyList()
     )
 
     fun loadRecipesListForCategory(category: Category) {
-        val categoryImage = try {
-            val imagePath = category.imageUrl
-            if (imagePath.isNotEmpty()) {
-                context.assets.open(imagePath).use { inputStream ->
-                    Drawable.createFromStream(inputStream, null)
-                }
-            } else null
-        } catch (e: Exception) {
-            Log.e("CategoryLoad", "Ошибка при загрузке изображения категории: ${e.message}", e)
-            null
-        }
+        val imageUrl = BASE_URL + category.imageUrl
         repository.loadRecipesByCategoryId(category.id) { recipesList ->
             if (recipesList == null) Toast.makeText(
                 context,
@@ -51,7 +40,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
             _recipesListState.value = RecipesListState(
                 category = category,
-                categoryImage = categoryImage,
+                categoryImageUrl = imageUrl,
                 recipesList = recipesList ?: emptyList()
             )
         }
