@@ -22,5 +22,4 @@ interface RecipeApiService {
 
     @GET("category/{id}/recipes")
     fun getRecipesListByCategoryId(@Path("id") categoryId: Int): Call<List<Recipe>>
-
 }
