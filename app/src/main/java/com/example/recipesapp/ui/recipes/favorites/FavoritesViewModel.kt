@@ -1,9 +1,7 @@
 package com.example.recipesapp.ui.recipes.favorites
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,11 +19,9 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     private val _favoritesState = MutableLiveData<FavoritesState>()
     val favoritesState: LiveData<FavoritesState> get() = _favoritesState
 
-    @SuppressLint("StaticFieldLeak")
-    private val context: Context = getApplication<Application>().applicationContext
-
     data class FavoritesState(
-        val favoritesList: List<Recipe> = emptyList()
+        val favoritesList: List<Recipe> = emptyList(),
+        val errorMessage: String? = null
     )
 
     fun loadFavorites() {
@@ -37,19 +33,14 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
                         favoritesIds.joinToString(",")
                     ) ?: emptyList()
                 )
-
             } catch (e: Exception) {
-                Toast.makeText(
-                    context,
-                    "Ошибка получения данных: $e",
-                    Toast.LENGTH_SHORT
-                ).show()
+                _favoritesState.value = FavoritesState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
 
     fun getFavoritesList(): MutableSet<String> {
-        val sharedPrefs = context.getSharedPreferences(
+        val sharedPrefs = getApplication<Application>().applicationContext.getSharedPreferences(
             APP_PREFS, Context.MODE_PRIVATE
         )
         return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())

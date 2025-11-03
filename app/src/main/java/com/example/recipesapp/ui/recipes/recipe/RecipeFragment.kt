@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -70,13 +71,21 @@ class RecipeFragment() : Fragment() {
         val methodAdapter = MethodAdapter(emptyList())
 
         viewModel.recipeState.observe(viewLifecycleOwner, Observer { state ->
+
+            state.errorMessage?.let { error ->
+                Toast.makeText(
+                    context,
+                    error,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             Log.i("!!!", "isFavorite:${state.isFavorite}")
 
-                Glide.with(this)
-                    .load(state.recipeImageUrl)
-                    .placeholder(R.drawable.img_placeholder)
-                    .error(R.drawable.img_error)
-                    .into(binding.ivRecipeCover)
+            Glide.with(this)
+                .load(state.recipeImageUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(binding.ivRecipeCover)
 
             val recipe = state.recipe
             binding.tvRecipeName.text = recipe?.title

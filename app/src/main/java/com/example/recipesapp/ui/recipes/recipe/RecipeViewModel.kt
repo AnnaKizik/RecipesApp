@@ -1,10 +1,8 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -25,9 +23,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     private val _recipeState = MutableLiveData<RecipeState>()
     val recipeState: LiveData<RecipeState> get() = _recipeState
 
-    @SuppressLint("StaticFieldLeak")
-    private val context: Context = getApplication<Application>().applicationContext
-
     init {
         Log.i("!!!", "инициализация View Model")
     }
@@ -39,7 +34,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         val isServingsSelectorActive: Boolean = false,
         val ingredients: List<Ingredient> = emptyList(),
         val cookingMethod: List<String> = emptyList(),
-        val recipeImageUrl: String?
+        val recipeImageUrl: String? = null,
+        val errorMessage: String? = null
     )
 
     fun loadRecipe(recipeId: Int) {
@@ -54,17 +50,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     recipeImageUrl = imageUrl
                 )
             } catch (e: Exception) {
-                Toast.makeText(
-                    context,
-                    "Ошибка получения данных: $e",
-                    Toast.LENGTH_SHORT
-                ).show()
+                _recipeState.value = RecipeState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
 
     fun getFavorites(): MutableSet<String> {
-        val sharedPrefs = context.getSharedPreferences(
+        val sharedPrefs = getApplication<Application>().applicationContext.getSharedPreferences(
             APP_PREFS, Context.MODE_PRIVATE
         )
         return HashSet(sharedPrefs?.getStringSet(FAVORITES_LIST, HashSet()) ?: mutableSetOf())
@@ -84,7 +76,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun saveFavorites(favoritesList: Set<String>) {
-        val sharedPrefs = context.getSharedPreferences(
+        val sharedPrefs = getApplication<Application>().applicationContext.getSharedPreferences(
             APP_PREFS, Context.MODE_PRIVATE
         )
         sharedPrefs.edit {

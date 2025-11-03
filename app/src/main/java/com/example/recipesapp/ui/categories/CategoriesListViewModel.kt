@@ -1,9 +1,6 @@
 package com.example.recipesapp.ui.categories
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,12 +16,10 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     private val _categoriesListState = MutableLiveData<CategoriesListState>()
     val categoriesListState: LiveData<CategoriesListState> get() = _categoriesListState
 
-    @SuppressLint("StaticFieldLeak")
-    private val context: Context = getApplication<Application>().applicationContext
-
     data class CategoriesListState(
         val categoriesList: List<Category> = emptyList(),
-        val selectedCategory: Category? = null
+        val selectedCategory: Category? = null,
+        val errorMessage: String? = null
     )
 
     fun loadCategoriesList() {
@@ -33,11 +28,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                 _categoriesListState.value =
                     CategoriesListState(categoriesList = repository.loadCategories() ?: emptyList())
             } catch (e: Exception) {
-                Toast.makeText(
-                    context,
-                    "Ошибка получения данных: $e",
-                    Toast.LENGTH_SHORT
-                ).show()
+                CategoriesListState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
@@ -49,13 +40,8 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                 _categoriesListState.value = _categoriesListState.value?.copy(
                     selectedCategory = category
                 )
-
             } catch (e: Exception) {
-                Toast.makeText(
-                    context,
-                    "Ошибка получения данных: $e",
-                    Toast.LENGTH_SHORT
-                ).show()
+                CategoriesListState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
