@@ -28,7 +28,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                 _categoriesListState.value =
                     CategoriesListState(categoriesList = repository.loadCategories() ?: emptyList())
             } catch (e: Exception) {
-                CategoriesListState(errorMessage = "Ошибка загрузки: $e")
+                _categoriesListState.value = CategoriesListState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
@@ -41,7 +41,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     selectedCategory = category
                 )
             } catch (e: Exception) {
-                CategoriesListState(errorMessage = "Ошибка загрузки: $e")
+                _categoriesListState.value = CategoriesListState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
