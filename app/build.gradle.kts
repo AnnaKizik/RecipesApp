@@ -4,6 +4,7 @@ plugins {
     id ("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
 }
 
 kotlin{
@@ -47,6 +48,10 @@ android {
 }
 
 dependencies {
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
     implementation (libs.glide)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
