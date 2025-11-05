@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = RecipesRepository()
+    private val repository = RecipesRepository(application)
 
     private val _recipeState = MutableLiveData<RecipeState>()
     val recipeState: LiveData<RecipeState> get() = _recipeState

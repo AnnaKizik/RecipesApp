@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = RecipesRepository()
+    private val repository = RecipesRepository(application)
 
     private val _categoriesListState = MutableLiveData<CategoriesListState>()
     val categoriesListState: LiveData<CategoriesListState> get() = _categoriesListState
@@ -25,10 +25,17 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     fun loadCategoriesList() {
         viewModelScope.launch {
             try {
-                _categoriesListState.value =
-                    CategoriesListState(categoriesList = repository.loadCategories() ?: emptyList())
+                val cachedCategories = repository.getCategoriesFromCache()
+                _categoriesListState.value = CategoriesListState(categoriesList = cachedCategories)
+                val loadedCategories = repository.loadCategories()
+                if (loadedCategories != null) {
+                    _categoriesListState.value =
+                        CategoriesListState(categoriesList = loadedCategories)
+                    repository.loadCategoriesToDatabase(loadedCategories)
+                }
             } catch (e: Exception) {
-                _categoriesListState.value = CategoriesListState(errorMessage = "Ошибка загрузки: $e")
+                _categoriesListState.value =
+                    CategoriesListState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }
@@ -41,7 +48,8 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
                     selectedCategory = category
                 )
             } catch (e: Exception) {
-                _categoriesListState.value = CategoriesListState(errorMessage = "Ошибка загрузки: $e")
+                _categoriesListState.value =
+                    CategoriesListState(errorMessage = "Ошибка загрузки: $e")
             }
         }
     }

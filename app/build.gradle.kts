@@ -1,13 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id ("kotlin-parcelize")
+    id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
 }
 
-kotlin{
+kotlin {
     jvmToolchain(21)
 }
 
@@ -50,10 +50,9 @@ android {
 dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation (libs.glide)
+    implementation(libs.glide)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit.v300)
     implementation(libs.androidx.fragment.ktx)
