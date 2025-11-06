@@ -8,8 +8,8 @@ import androidx.room.Query
 @Dao
 interface CategoriesDao {
     @Query("SELECT * FROM category")
-    fun getAllCategories(): List<Category>
+    suspend fun getAllCategories(): List<Category>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addCategories(categoryList: List<Category>)
+    suspend fun addCategories(categoryList: List<Category>)
 }
