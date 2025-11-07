@@ -1,6 +1,9 @@
 package com.example.recipesapp
 
+import android.content.Context
 import android.util.Log
+import androidx.room.Room
+import com.example.recipesapp.model.CategoriesDatabase
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -12,7 +15,9 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.Retrofit.Builder
 
-class RecipesRepository() {
+class RecipesRepository(context: Context) {
+
+    private val appContext = context.applicationContext
 
     val contentType = "application/json".toMediaType()
     val retrofit: Retrofit = Builder()
@@ -21,6 +26,21 @@ class RecipesRepository() {
         .build()
 
     val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
+
+    val categoriesDatabase =
+        Room.databaseBuilder(
+            appContext,
+            CategoriesDatabase::class.java,
+            "database-categories"
+        ).build()
+
+    val categoriesDao = categoriesDatabase.categoriesDao()
+
+    suspend fun getCategoriesFromCache(): List<Category> = categoriesDao.getAllCategories()
+
+    suspend fun loadCategoriesToDatabase(loadedCategories: List<Category>) {
+        categoriesDao.addCategories(loadedCategories)
+    }
 
     suspend fun loadCategories(): List<Category>? {
         return withContext(Dispatchers.IO) {
