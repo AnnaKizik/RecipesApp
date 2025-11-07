@@ -36,16 +36,10 @@ class RecipesRepository(context: Context) {
 
     val categoriesDao = categoriesDatabase.categoriesDao()
 
-    suspend fun getCategoriesFromCache(): List<Category> {
-        return withContext(Dispatchers.IO) {
-            categoriesDao.getAllCategories()
-        }
-    }
+    suspend fun getCategoriesFromCache(): List<Category> = categoriesDao.getAllCategories()
 
     suspend fun loadCategoriesToDatabase(loadedCategories: List<Category>) {
-        withContext(Dispatchers.IO) {
-            categoriesDao.addCategories(loadedCategories)
-        }
+        categoriesDao.addCategories(loadedCategories)
     }
 
     suspend fun loadCategories(): List<Category>? {
