@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.recipesapp.model.CategoriesDatabase
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
+import com.example.recipesapp.model.RecipesDatabase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -53,6 +54,21 @@ class RecipesRepository(context: Context) {
                 null
             }
         }
+    }
+
+    val recipesDatabase =
+        Room.databaseBuilder(
+            appContext,
+            RecipesDatabase::class.java,
+            "database-recipes"
+        ).build()
+
+    val recipesDao = recipesDatabase.recipesDao()
+
+    suspend fun getRecipesFromCache(): List<Recipe> = recipesDao.getAllRecipes()
+
+    suspend fun loadRecipesToDatabase(loadedRecipes: List<Recipe>) {
+        recipesDao.addRecipes(loadedRecipes)
     }
 
     suspend fun loadRecipesByCategoryId(categoryId: Int): List<Recipe>? {

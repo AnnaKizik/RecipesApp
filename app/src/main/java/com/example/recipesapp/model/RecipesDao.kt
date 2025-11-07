@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface RecipesDao{
+interface RecipesDao {
     @Query("SELECT * FROM recipe")
     suspend fun getAllRecipes(): List<Recipe>
 
