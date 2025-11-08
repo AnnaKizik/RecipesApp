@@ -29,7 +29,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         val imageUrl = BASE_URL + category.imageUrl
         viewModelScope.launch {
             try {
-                val cachedRecipes = repository.getRecipesFromCache()
+                val cachedRecipes = repository.getRecipesFromCache(category.id)
                 val cachedState = RecipesListState(
                     category = category,
                     categoryImageUrl = imageUrl,
