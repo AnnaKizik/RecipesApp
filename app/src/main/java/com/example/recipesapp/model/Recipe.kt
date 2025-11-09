@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 @Entity
 data class Recipe(
     @PrimaryKey val id: Int,
+    @ColumnInfo(name = "category_id") val categoryId: Int,
     @ColumnInfo(name = "recipe_title") val title: String,
     @ColumnInfo(name = "servings_count") val servings: Int = 1,
     @ColumnInfo(name = "ingredients") val ingredients: List<Ingredient>,

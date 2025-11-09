@@ -10,7 +10,7 @@ interface RecipesDao {
     @Query("SELECT * FROM recipe")
     suspend fun getAllRecipes(): List<Recipe>
 
-    @Query("SELECT * FROM recipe WHERE id = :categoryId")
+    @Query("SELECT * FROM recipe WHERE category_id = :categoryId")
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
