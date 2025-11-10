@@ -3,7 +3,7 @@ package com.example.recipesapp
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-import com.example.recipesapp.model.CategoriesDatabase
+import com.example.recipesapp.model.AppDatabase
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -27,14 +27,14 @@ class RecipesRepository(context: Context) {
 
     val service: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    val categoriesDatabase =
+    val appDatabase =
         Room.databaseBuilder(
             appContext,
-            CategoriesDatabase::class.java,
-            "database-categories"
+            AppDatabase::class.java,
+            "app-database"
         ).build()
 
-    val categoriesDao = categoriesDatabase.categoriesDao()
+    val categoriesDao = appDatabase.categoriesDao()
 
     suspend fun getCategoriesFromCache(): List<Category> = categoriesDao.getAllCategories()
 
@@ -53,6 +53,14 @@ class RecipesRepository(context: Context) {
                 null
             }
         }
+    }
+
+    val recipesDao = appDatabase.recipesDao()
+
+    suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> = recipesDao.getRecipesByCategoryId(categoryId)
+
+    suspend fun loadRecipesToDatabase(loadedRecipes: List<Recipe>) {
+        recipesDao.addRecipes(loadedRecipes)
     }
 
     suspend fun loadRecipesByCategoryId(categoryId: Int): List<Recipe>? {

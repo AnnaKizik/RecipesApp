@@ -29,11 +29,20 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         val imageUrl = BASE_URL + category.imageUrl
         viewModelScope.launch {
             try {
-                _recipesListState.value = RecipesListState(
+                val cachedRecipes = repository.getRecipesFromCache(category.id)
+                val cachedState = RecipesListState(
                     category = category,
                     categoryImageUrl = imageUrl,
-                    recipesList = repository.loadRecipesByCategoryId(category.id) ?: emptyList()
+                    recipesList = cachedRecipes
                 )
+                _recipesListState.value = cachedState
+                val loadedRecipes = repository.loadRecipesByCategoryId(category.id)
+                if (loadedRecipes != null) {
+                    _recipesListState.value = cachedState.copy(
+                        recipesList = loadedRecipes
+                    )
+                    repository.loadRecipesToDatabase(loadedRecipes)
+                }
             } catch (e: Exception) {
                 _recipesListState.value = RecipesListState(errorMessage = "Ошибка загрузки: $e")
             }
