@@ -1,10 +1,9 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.RecipesRepository
 import com.example.recipesapp.model.BASE_URL
@@ -12,9 +11,7 @@ import com.example.recipesapp.model.Ingredient
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipeViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = RecipesRepository(application)
+class RecipeViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
 
     private val _recipeState = MutableLiveData<RecipeState>()
     val recipeState: LiveData<RecipeState> get() = _recipeState
@@ -37,7 +34,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     fun loadRecipe(recipeId: Int) {
         viewModelScope.launch {
             try {
-                val recipe = repository.loadRecipeById(recipeId)
+                val recipe = recipesRepository.loadRecipeById(recipeId)
                 val imageUrl = BASE_URL + recipe?.imageUrl
                 _recipeState.value = RecipeState(
                     recipe = recipe,
@@ -56,13 +53,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             val recipeId = _recipeState.value?.recipe?.id ?: return@launch
             val isFavorite = checkIsInFavorites(recipeId)
             val newFavoriteStatus = !isFavorite
-            repository.updateFavoriteStatus(recipeId, newFavoriteStatus)
+            recipesRepository.updateFavoriteStatus(recipeId, newFavoriteStatus)
             _recipeState.value = recipeState.value?.copy(isFavorite = newFavoriteStatus)
         }
     }
 
     private suspend fun checkIsInFavorites(recipeId: Int): Boolean {
-        return repository.getRecipeById(recipeId).isFavorite
+        return recipesRepository.getRecipeById(recipeId).isFavorite
     }
 
     fun updatePortionsCount(portionsCount: Int) {

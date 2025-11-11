@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.lang.IllegalStateException
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.recipesapp.R
+import com.example.recipesapp.RecipesApplication
 
 class PortionSeekBarListener(
     val onChangeIngredients: (Int) -> Unit
@@ -42,14 +42,20 @@ class RecipeFragment() : Fragment() {
             "Binding for FragmentRecipeBinding must not be null"
         )
 
-    private val viewModel: RecipeViewModel by viewModels()
+    private lateinit var recipeViewModel: RecipeViewModel
     private val recipeFragmentArgs: RecipeFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        recipeViewModel = appContainer.recipeViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRecipeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,7 +63,7 @@ class RecipeFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recipeId = recipeFragmentArgs.recipeId
-        viewModel.loadRecipe(recipeId)
+        recipeViewModel.loadRecipe(recipeId)
         initUi()
     }
 
@@ -70,7 +76,7 @@ class RecipeFragment() : Fragment() {
             )
         val methodAdapter = MethodAdapter(emptyList())
 
-        viewModel.recipeState.observe(viewLifecycleOwner, Observer { state ->
+        recipeViewModel.recipeState.observe(viewLifecycleOwner, Observer { state ->
 
             state.errorMessage?.let { error ->
                 Toast.makeText(
@@ -95,7 +101,7 @@ class RecipeFragment() : Fragment() {
                 else setImageResource(R.drawable.ic_heart_empty)
 
                 setOnClickListener {
-                    viewModel.onFavoritesClicked()
+                    recipeViewModel.onFavoritesClicked()
                 }
             }
 
@@ -118,7 +124,7 @@ class RecipeFragment() : Fragment() {
                 sbServingsCount.progress = state.portionsCount
                 tvServingCount.text = state.portionsCount.toString()
                 sbServingsCount.setOnSeekBarChangeListener(PortionSeekBarListener {
-                    viewModel.updatePortionsCount(it)
+                    recipeViewModel.updatePortionsCount(it)
                 })
             }
 
