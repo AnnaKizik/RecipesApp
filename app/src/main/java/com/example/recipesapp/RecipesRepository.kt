@@ -59,6 +59,12 @@ class RecipesRepository(context: Context) {
 
     suspend fun getRecipesFromCache(categoryId: Int): List<Recipe> = recipesDao.getRecipesByCategoryId(categoryId)
 
+    suspend fun getRecipeById(recipeId: Int): Recipe = recipesDao.getRecipeById(recipeId)
+
+    suspend fun getFavoriteRecipes(): List<Recipe> = recipesDao.getFavoriteRecipes()
+
+    suspend fun updateFavoriteStatus(recipeId: Int, isFavorite: Boolean) = recipesDao.updateFavoriteState(recipeId, isFavorite)
+
     suspend fun loadRecipesToDatabase(loadedRecipes: List<Recipe>) {
         recipesDao.addRecipes(loadedRecipes)
     }
