@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 kotlin {
@@ -48,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.kotlinx.coroutines.core)

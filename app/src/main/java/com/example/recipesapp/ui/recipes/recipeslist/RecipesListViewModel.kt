@@ -8,9 +8,12 @@ import com.example.recipesapp.RecipesRepository
 import com.example.recipesapp.model.BASE_URL
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipesListViewModel(private val recipesRepository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipesListViewModel @Inject constructor(private val recipesRepository: RecipesRepository) : ViewModel() {
 
     private val _recipesListState = MutableLiveData<RecipesListState>()
     val recipesListState: LiveData<RecipesListState> get() = _recipesListState
