@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.recipesapp.RecipesApplication
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 import java.lang.IllegalStateException
 
@@ -18,20 +18,26 @@ class CategoriesListFragment : Fragment() {
             "Binding for FragmentListCategoriesBinding must not be null"
         )
 
-    private val viewModel: CategoriesListViewModel by viewModels()
+    private lateinit var categoriesListViewModel: CategoriesListViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        categoriesListViewModel = appContainer.categoriesListViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentListCategoriesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadCategoriesList()
+        categoriesListViewModel.loadCategoriesList()
         initUi()
     }
 
@@ -51,7 +57,7 @@ class CategoriesListFragment : Fragment() {
             }
         })
 
-        viewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
+        categoriesListViewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
             state.errorMessage?.let { error ->
                 Toast.makeText(
                     context,
@@ -64,22 +70,22 @@ class CategoriesListFragment : Fragment() {
     }
 
     private fun openRecipesByCategoryId(categoryId: Int) {
-        viewModel.categoriesListState.value?.errorMessage?.let { error ->
+        categoriesListViewModel.categoriesListState.value?.errorMessage?.let { error ->
             Toast.makeText(
                 context,
                 error,
                 Toast.LENGTH_SHORT
             ).show()
         }
-        viewModel.loadCategoryById(categoryId)
-        viewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
+        categoriesListViewModel.loadCategoryById(categoryId)
+        categoriesListViewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
             state.selectedCategory?.let { category ->
                 findNavController().navigate(
                     CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
                         category
                     )
                 )
-                viewModel.clearSelectedCategory()
+                categoriesListViewModel.clearSelectedCategory()
             }
         }
     }

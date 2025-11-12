@@ -1,17 +1,16 @@
 package com.example.recipesapp.ui.categories
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.RecipesRepository
 import com.example.recipesapp.model.Category
 import kotlinx.coroutines.launch
 
-class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = RecipesRepository(application)
+class CategoriesListViewModel(
+    private val recipesRepository: RecipesRepository,
+) : ViewModel() {
 
     private val _categoriesListState = MutableLiveData<CategoriesListState>()
     val categoriesListState: LiveData<CategoriesListState> get() = _categoriesListState
@@ -25,13 +24,13 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     fun loadCategoriesList() {
         viewModelScope.launch {
             try {
-                val cachedCategories = repository.getCategoriesFromCache()
+                val cachedCategories = recipesRepository.getCategoriesFromCache()
                 _categoriesListState.value = CategoriesListState(categoriesList = cachedCategories)
-                val loadedCategories = repository.loadCategories()
+                val loadedCategories = recipesRepository.loadCategories()
                 if (loadedCategories != null) {
                     _categoriesListState.value =
                         CategoriesListState(categoriesList = loadedCategories)
-                    repository.loadCategoriesToDatabase(loadedCategories)
+                    recipesRepository.loadCategoriesToDatabase(loadedCategories)
                 }
             } catch (e: Exception) {
                 _categoriesListState.value =
@@ -43,7 +42,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     fun loadCategoryById(categoryId: Int) {
         viewModelScope.launch {
             try {
-                val category = repository.loadCategoryById(categoryId)
+                val category = recipesRepository.loadCategoryById(categoryId)
                 _categoriesListState.value = _categoriesListState.value?.copy(
                     selectedCategory = category
                 )

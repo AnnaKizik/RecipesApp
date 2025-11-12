@@ -5,7 +5,10 @@ import kotlinx.serialization.json.Json
 
 class TypeConverters {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+    }
 
     @TypeConverter
     fun stringListToJson(list: List<String>): String {
