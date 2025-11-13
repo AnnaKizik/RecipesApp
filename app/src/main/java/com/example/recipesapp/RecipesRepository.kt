@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class RecipesRepository @Inject constructor(
    private val recipesDao: RecipesDao,
@@ -26,7 +25,7 @@ class RecipesRepository @Inject constructor(
     }
 
     suspend fun loadCategories(): List<Category>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val categoriesCall: Call<List<Category>> = recipeApiService.getCategories()
                 val categoriesResponse = categoriesCall.execute()
@@ -69,19 +68,6 @@ class RecipesRepository @Inject constructor(
                 val recipeByIdCall = recipeApiService.getRecipeById(recipeId)
                 val recipeByIdResponse = recipeByIdCall.execute()
                 recipeByIdResponse.body()
-            } catch (e: Exception) {
-                Log.i("!!!", "Ошибка загрузки: $e")
-                null
-            }
-        }
-    }
-
-    suspend fun loadRecipesByIds(ids: String): List<Recipe>? {
-        return withContext(ioDispatcher) {
-            try {
-                val recipesByIdsCall = recipeApiService.getRecipesByIdsList(ids)
-                val recipesByIdsResponse = recipesByIdsCall.execute()
-                recipesByIdsResponse.body()
             } catch (e: Exception) {
                 Log.i("!!!", "Ошибка загрузки: $e")
                 null

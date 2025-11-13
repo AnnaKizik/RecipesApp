@@ -17,12 +17,14 @@ import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.Retrofit.Builder
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class RecipeModule {
 
     @Provides
+    @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(
             context,
@@ -40,6 +42,7 @@ class RecipeModule {
     fun provideContentType(): MediaType = "application/json".toMediaType()
 
     @Provides
+    @Singleton
     fun provideRetrofit(contentType: MediaType): Retrofit = Builder()
         .baseUrl("https://recipes.androidsprint.ru/api/")
         .addConverterFactory(Json.asConverterFactory(contentType))
