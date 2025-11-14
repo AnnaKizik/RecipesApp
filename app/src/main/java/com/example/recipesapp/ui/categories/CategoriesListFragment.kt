@@ -20,7 +20,7 @@ class CategoriesListFragment : Fragment() {
             "Binding for FragmentListCategoriesBinding must not be null"
         )
 
-   private val categoriesListViewModel: CategoriesListViewModel by viewModels()
+    private val categoriesListViewModel: CategoriesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +62,14 @@ class CategoriesListFragment : Fragment() {
                 ).show()
             }
             categoriesAdapter.updateData(state.categoriesList)
+            state.selectedCategory?.let { category ->
+                findNavController().navigate(
+                    CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                        category
+                    )
+                )
+                categoriesListViewModel.clearSelectedCategory()
+            }
         }
     }
 
@@ -74,16 +82,6 @@ class CategoriesListFragment : Fragment() {
             ).show()
         }
         categoriesListViewModel.loadCategoryById(categoryId)
-        categoriesListViewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
-            state.selectedCategory?.let { category ->
-                findNavController().navigate(
-                    CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                        category
-                    )
-                )
-                categoriesListViewModel.clearSelectedCategory()
-            }
-        }
     }
 
 }
