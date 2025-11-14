@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.recipesapp.RecipesApplication
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.IllegalStateException
 
+@AndroidEntryPoint
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
     private val binding
@@ -18,13 +20,7 @@ class CategoriesListFragment : Fragment() {
             "Binding for FragmentListCategoriesBinding must not be null"
         )
 
-    private lateinit var categoriesListViewModel: CategoriesListViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val appContainer = (requireActivity().application as RecipesApplication).appContainer
-        categoriesListViewModel = appContainer.categoriesListViewModelFactory.create()
-    }
+    private val categoriesListViewModel: CategoriesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +62,14 @@ class CategoriesListFragment : Fragment() {
                 ).show()
             }
             categoriesAdapter.updateData(state.categoriesList)
+            state.selectedCategory?.let { category ->
+                findNavController().navigate(
+                    CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                        category
+                    )
+                )
+                categoriesListViewModel.clearSelectedCategory()
+            }
         }
     }
 
@@ -78,16 +82,6 @@ class CategoriesListFragment : Fragment() {
             ).show()
         }
         categoriesListViewModel.loadCategoryById(categoryId)
-        categoriesListViewModel.categoriesListState.observe(viewLifecycleOwner) { state ->
-            state.selectedCategory?.let { category ->
-                findNavController().navigate(
-                    CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
-                        category
-                    )
-                )
-                categoriesListViewModel.clearSelectedCategory()
-            }
-        }
     }
 
 }

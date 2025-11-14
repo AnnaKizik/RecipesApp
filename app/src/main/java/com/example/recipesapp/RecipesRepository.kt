@@ -8,14 +8,16 @@ import com.example.recipesapp.model.RecipesDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
    private val recipesDao: RecipesDao,
    private val categoriesDao: CategoriesDao,
    private val recipeApiService: RecipeApiService,
-   private val ioDispatcher: CoroutineContext,
 ) {
+
+    private val ioDispatcher = Dispatchers.IO
+
     suspend fun getCategoriesFromCache(): List<Category> = categoriesDao.getAllCategories()
 
     suspend fun loadCategoriesToDatabase(loadedCategories: List<Category>) {
@@ -23,7 +25,7 @@ class RecipesRepository(
     }
 
     suspend fun loadCategories(): List<Category>? {
-        return withContext(Dispatchers.IO) {
+        return withContext(ioDispatcher) {
             try {
                 val categoriesCall: Call<List<Category>> = recipeApiService.getCategories()
                 val categoriesResponse = categoriesCall.execute()
@@ -66,19 +68,6 @@ class RecipesRepository(
                 val recipeByIdCall = recipeApiService.getRecipeById(recipeId)
                 val recipeByIdResponse = recipeByIdCall.execute()
                 recipeByIdResponse.body()
-            } catch (e: Exception) {
-                Log.i("!!!", "Ошибка загрузки: $e")
-                null
-            }
-        }
-    }
-
-    suspend fun loadRecipesByIds(ids: String): List<Recipe>? {
-        return withContext(ioDispatcher) {
-            try {
-                val recipesByIdsCall = recipeApiService.getRecipesByIdsList(ids)
-                val recipesByIdsResponse = recipesByIdsCall.execute()
-                recipesByIdsResponse.body()
             } catch (e: Exception) {
                 Log.i("!!!", "Ошибка загрузки: $e")
                 null
